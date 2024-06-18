@@ -1,0 +1,44 @@
+[project]
+name = "semantic-catalogue"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "cjber", email = "cjberragan@gmail.com" }
+]
+dependencies = [
+    "requests>=2.31.0",
+    "langchain>=0.2.0",
+    "langchain-community>=0.2.0",
+    "langchain-openai>=0.1.7",
+    "langchain-pinecone>=0.1.1",
+    "polars>=0.20.25",
+    # "duckdb>=0.10.2",
+    # "duckdb-engine>=0.12.0",
+    "python-dotenv>=1.0.1",
+    "dagster>=1.7.8",
+    "dagster-webserver>=1.7.8",
+    "dagster-openai>=0.23.9",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "ipython>=8.24.0",
+    "sourcery-cli>=1.18.0",
+    "ipdb>=0.13.13",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/semantic_catalogue"]
+
+[tool.dagster]
+module_name = "src"
