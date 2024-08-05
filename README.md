@@ -16,6 +16,10 @@ The Semantic Catalogue follows a standard Retrieval Augmented Generation (RAG) a
 
 ![](./reports/figs/system.png)
 
+Dagster is used to automate the creation of the Pinecone vector database:
+
+![](./reports/figs/Global_Asset_Lineage.svg)
+
 ## Build Python environment
 
 To contribute, please follow the instructions below:
