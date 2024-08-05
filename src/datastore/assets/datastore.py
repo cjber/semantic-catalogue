@@ -9,9 +9,9 @@ from dagster import (
 )
 from dagster_openai import OpenAIResource
 from langchain_community.document_loaders import DirectoryLoader
-from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
+from langchain_text_splitters import CharacterTextSplitter
 from pinecone import Pinecone, ServerlessSpec
 
 from src.common.settings import cfg
@@ -39,15 +39,17 @@ def _process_documents(
             use_multithreading=True,
             show_progress=True,
         )
+        documents = loader.load()
         documents.extend(loader.load())
+        documents = [doc for doc in documents if doc.metadata is not {}]
 
     with openai.get_client(context) as client:
         embeddings = OpenAIEmbeddings(
             client=client.embeddings, model=cfg.datastore.embed_model
         )
 
-    text_splitter = SemanticChunker(
-        embeddings=embeddings, breakpoint_threshold_type="percentile"
+    text_splitter = CharacterTextSplitter.from_tiktoken_encoder(
+        encoding="cl100k_base", chunk_size=100, chunk_overlap=0
     )
     docs = text_splitter.split_documents(documents)
 
