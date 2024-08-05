@@ -63,7 +63,7 @@ def _fetch_metadata(context: AssetExecutionContext, identifier: int):
 
 @asset
 def ukds_datasets(
-    context: AssetExecutionContext, ukds_identifiers: list[str]
+    context: AssetExecutionContext, ukds_identifiers: list[int]
 ) -> pl.DataFrame:
     data = []
     for identifier in tqdm(ukds_identifiers):
