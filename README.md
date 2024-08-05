@@ -23,15 +23,15 @@ To contribute, please follow the instructions below:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/cjber/semantic-catalogue.git
+    git clone https://github.com/cjber/semantic-catalogue.git
    ```
 
 2. Install dependencies:
 
-```bash
-cd cdrc-semantic-search
-pip install -r requirements.lock
-```
+    ```bash
+    cd cdrc-semantic-search
+    pip install -r requirements.lock
+    ```
 
 3. Configure the system:
 
@@ -53,5 +53,8 @@ podman compose up --build -d
 
 ```
 
-
 > WARNING: This is not intended for public use; requires access to a private database.
+
+## Documentation
+
+Further information regarding the methods used may be found in [DOCS.md](./reports/DOCS.md)
