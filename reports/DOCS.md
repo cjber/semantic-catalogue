@@ -2,7 +2,7 @@
 
 * Unify search across catalogues
 * Uses semantic search with RAG for results explainability
-* Llama Index framework
+* LangGraph/LangChain framework
 
 # Methodology
 
@@ -24,19 +24,18 @@ For each unique document returned, an explainable 'Ask AI' option was added, whi
 
 ```python
 prompt = """
-Below is a dataset description that is relevant to a researchers query.
+A user has queried a data catalogue, which has returned a relevant dataset.
 
-Explain the relevance of this dataset to the query in under 50 words. Use your own knowledge or the data profile. Do not say it is unrelated; attempt to find a relevant connection.
+Explain the relevance of this dataset to the query in under three sentences. Use your own knowledge or the data profile. Do not say it is unrelated; attempt to find a relevant connection.
 
----------------------
-Query: "{query_str}"
+Query: "{query}"
 
 Dataset description:
 
-{context_str}
----------------------
+{context}
 """
 ```
+
 This approach ensures that users receive not only relevant search results but also understandable explanations regarding the relevance of each dataset to their query.
 
 # System architecture
