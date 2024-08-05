@@ -10,7 +10,9 @@
 #   universal: false
 
 -e file:.
-aiohttp==3.9.5
+aiohappyeyeballs==2.3.4
+    # via aiohttp
+aiohttp==3.10.1
     # via langchain
     # via langchain-community
     # via langchain-pinecone
@@ -30,7 +32,7 @@ anyio==4.4.0
     # via watchfiles
 asttokens==2.4.1
     # via stack-data
-attrs==23.2.0
+attrs==24.1.0
     # via aiohttp
 backoff==2.2.1
     # via gql
@@ -55,21 +57,21 @@ croniter==3.0.3
     # via dagster
 cryptography==43.0.0
     # via pdfminer-six
-dagster==1.7.15
+dagster==1.7.16
     # via dagster-graphql
     # via dagster-openai
     # via dagster-postgres
     # via dagster-webserver
     # via semantic-catalogue
-dagster-graphql==1.7.15
+dagster-graphql==1.7.16
     # via dagster-webserver
-dagster-openai==0.23.15
+dagster-openai==0.23.16
     # via semantic-catalogue
-dagster-pipes==1.7.15
+dagster-pipes==1.7.16
     # via dagster
-dagster-postgres==0.23.15
+dagster-postgres==0.23.16
     # via semantic-catalogue
-dagster-webserver==1.7.15
+dagster-webserver==1.7.16
     # via semantic-catalogue
 dataclasses-json==0.6.7
     # via langchain-community
@@ -149,10 +151,10 @@ jsonpointer==3.0.0
 langchain==0.2.12
     # via langchain-community
     # via semantic-catalogue
-langchain-community==0.2.10
+langchain-community==0.2.11
     # via langchain-experimental
     # via semantic-catalogue
-langchain-core==0.2.27
+langchain-core==0.2.28
     # via langchain
     # via langchain-community
     # via langchain-experimental
@@ -160,7 +162,7 @@ langchain-core==0.2.27
     # via langchain-pinecone
     # via langchain-text-splitters
     # via langgraph
-langchain-experimental==0.0.63
+langchain-experimental==0.0.64
     # via semantic-catalogue
 langchain-openai==0.1.20
     # via semantic-catalogue
@@ -201,7 +203,7 @@ numpy==1.26.4
     # via langchain
     # via langchain-community
     # via langchain-pinecone
-openai==1.37.1
+openai==1.38.0
     # via dagster-openai
     # via langchain-openai
 orjson==3.10.6
@@ -226,7 +228,7 @@ pinecone-plugin-inference==1.0.3
 pinecone-plugin-interface==0.0.7
     # via pinecone-client
     # via pinecone-plugin-inference
-polars==1.3.0
+polars==1.4.1
     # via semantic-catalogue
 prompt-toolkit==3.0.47
     # via ipython
@@ -251,7 +253,7 @@ pydantic==2.8.2
     # via pydantic-settings
 pydantic-core==2.20.1
     # via pydantic
-pydantic-settings==2.3.4
+pydantic-settings==2.4.0
     # via semantic-catalogue
 pygments==2.18.0
     # via ipython
@@ -339,7 +341,7 @@ tomli==2.0.1
     # via dagster
 toposort==1.10
     # via dagster
-tqdm==4.66.4
+tqdm==4.66.5
     # via dagster
     # via openai
     # via pinecone-client
@@ -374,7 +376,7 @@ urllib3==2.2.2
     # via pinecone-client
     # via requests
     # via types-requests
-uvicorn==0.30.3
+uvicorn==0.30.5
     # via dagster-webserver
     # via fastapi
     # via fastapi-cli
