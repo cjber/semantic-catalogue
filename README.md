@@ -1,4 +1,4 @@
-# CDRC Semantic Search System
+# Semantic Catalogue
 
 ## Overview
 
