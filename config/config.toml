@@ -1,0 +1,10 @@
+[datastore]
+index_name = "data-catalogue"
+embed_model = "text-embedding-3-large"
+embed_dim = 3072
+chunk_size = 256
+chunk_overlap = 32
+
+[model]
+llm = "gpt-3.5-turbo"
+top_k = 30

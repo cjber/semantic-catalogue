@@ -1,0 +1,99 @@
+services:
+  datastore-postgresql:
+    image: postgres:11
+    container_name: datastore-postgresql
+    environment:
+      POSTGRES_USER: "postgres_user"
+      POSTGRES_PASSWORD: "postgres_password"
+      POSTGRES_DB: "postgres_db"
+    networks:
+      - datastore-network
+
+  datastore-code:
+    container_name: datastore-code
+    restart: always
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: datastore
+    security_opt:
+      - "label:disable"
+    entrypoint:
+      - dagster
+      - api
+      - grpc
+      - -h
+      - "0.0.0.0"
+      - -p
+      - "4000"
+      - -m
+      - src.datastore
+    environment:
+      DAGSTER_POSTGRES_USER: "postgres_user"
+      DAGSTER_POSTGRES_PASSWORD: "postgres_password"
+      DAGSTER_POSTGRES_DB: "postgres_db"
+      DAGSTER_CURRENT_IMAGE: "datastore"
+    volumes:
+      - ./src:/opt/dagster/app/src
+      - ./config:/opt/dagster/app/config
+      - ./data:/opt/dagster/app/data
+    networks:
+      - datastore-network
+
+  datastore-server:
+    container_name: datastore-server
+    build:
+      context: .
+      dockerfile: Containerfile
+    entrypoint:
+      - dagster-webserver
+      - -h
+      - "0.0.0.0"
+      - -p
+      - "3000"
+    expose:
+      - "3000"
+    ports:
+      - 3000:3000
+    security_opt:
+      - "label:disable"
+    environment:
+      DAGSTER_POSTGRES_USER: "postgres_user"
+      DAGSTER_POSTGRES_PASSWORD: "postgres_password"
+      DAGSTER_POSTGRES_DB: "postgres_db"
+    volumes:
+      - ./src:/opt/dagster/app/src
+      - ./config:/opt/dagster/app/config
+      - ./data:/opt/dagster/app/data
+    networks:
+      - datastore-network
+
+  datastore-daemon:
+    container_name: datastore-daemon
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Containerfile
+    entrypoint:
+      - dagster-daemon
+      - run
+    security_opt:
+      - "label:disable"
+    environment:
+      DAGSTER_POSTGRES_USER: "postgres_user"
+      DAGSTER_POSTGRES_PASSWORD: "postgres_password"
+      DAGSTER_POSTGRES_DB: "postgres_db"
+    volumes:
+      - ./src:/opt/dagster/app/src
+      - ./config:/opt/dagster/app/config
+      - ./data:/opt/dagster/app/data
+    networks:
+      - datastore-network
+    depends_on:
+      - datastore-postgresql
+      - datastore-code
+
+networks:
+  datastore-network:
+    driver: bridge
+    name: datastore-network

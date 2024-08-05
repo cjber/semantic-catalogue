@@ -1,12 +1,21 @@
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 class Paths:
-    DATA = Path("data")
+    DATA: Path = Path("data")
     ADR = DATA / "adr"
+    UKDS = DATA / "ukds"
+    CDRC = DATA / "cdrc"
+
+    @classmethod
+    def ensure_directories_exist(cls):
+        cls.ADR.mkdir(parents=True, exist_ok=True)
+        cls.UKDS.mkdir(parents=True, exist_ok=True)
+        cls.CDRC.mkdir(parents=True, exist_ok=True)
 
 
-class Consts:
-    INDEX_NAME = "data-catalogue"
-    EMBEDDING_MODEL = "text-embedding-3-large"
-    EMBEDDING_DIM = 3072
+Paths.ensure_directories_exist()

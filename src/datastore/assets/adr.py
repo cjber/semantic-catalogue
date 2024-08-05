@@ -1,10 +1,10 @@
 import itertools
 import json
-import logging
 
 import polars as pl
 import requests
 from dagster import AssetExecutionContext, asset
+from tenacity import retry, stop_after_attempt, wait_exponential
 from tqdm import tqdm
 
 from src.common.utils import Paths
@@ -15,7 +15,7 @@ BASE_URL = "https://api-datacatalogue.adruk.org/api"
 
 
 @asset
-def adr_session():
+def adr_session() -> requests.Session:
     session = requests.Session()
     session.headers.update({"X-API-Version": API_VERSION})
     return session
@@ -28,16 +28,26 @@ def adr_datasets_id(
     datasets = []
     for page_number in itertools.count(start=1):
         context.log.info(f"Fetching page {page_number}")
-        datasets_page = _fetch_datasets_page(adr_session, page_number)
-        if not datasets_page:
+        datasets_page = _fetch_datasets_page(context, adr_session, page_number)
+        if "end" in datasets_page:
+            context.log.info(f"End of pages reached at {datasets_page['end']}")
             break
         datasets.extend(datasets_page)
-    df = pl.DataFrame(datasets)
+    df = (
+        pl.DataFrame(datasets)
+        .select(["origin", "id", "searchResultType", "title"])
+        .filter(pl.col("searchResultType") == "PHYSICAL")
+        .with_columns(pl.col("origin").struct[0].alias("origin_id"))
+    )
     df.write_parquet(Paths.ADR / "adr_datasets_id.parquet")
+
     return df
 
 
-def _fetch_datasets_page(adr_session: requests.Session, page_number: int) -> dict:
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
+def _fetch_datasets_page(
+    context: AssetExecutionContext, adr_session: requests.Session, page_number: int
+) -> dict:
     params = {
         "pageSize": PAGE_SIZE,
         "pageNumber": page_number,
@@ -50,11 +60,16 @@ def _fetch_datasets_page(adr_session: requests.Session, page_number: int) -> dic
     try:
         response = adr_session.get(f"{BASE_URL}/{{sql}}/dataset", params=params)
         response.raise_for_status()
-        return json.loads(response.content)["content"]
+        content = json.loads(response.content)["content"]
+        if not content:
+            return {"end": page_number}
+        return content
     except requests.HTTPError as http_err:
-        logging.error(f"HTTP error occurred: {http_err}")
+        context.log.error(f"HTTP error occurred: {http_err}")
+        return {}
     except Exception as err:
-        logging.error(f"Other error occurred: {err}")
+        context.log.error(f"Other error occurred: {err}")
+        return {}
 
 
 @asset
@@ -63,19 +78,26 @@ def adr_datasets(
     adr_session: requests.Session,
     adr_datasets_id: pl.DataFrame,
 ) -> pl.DataFrame:
-    df = adr_datasets_id.filter(pl.col("searchResultType") == "PHYSICAL").with_columns(
-        pl.col("origin").struct[0].alias("origin_id")
-    )
 
     datasets_list = []
-    for row in tqdm(df.rows(named=True), total=len(df)):
+    for row in tqdm(adr_datasets_id.rows(named=True), total=len(adr_datasets_id)):
         dataset = _fetch_dataset_info(context, adr_session, row)
-        datasets_list.append(dataset)
+        if dataset:
+            datasets_list.append(dataset)
     df = pl.DataFrame(datasets_list)
-    df.write_parquet(Paths.ADR / "adr_datasets.parquet")
+    (
+        df.with_columns(
+            pl.col("coverage").struct[0].alias("coverage_0"),
+            pl.col("coverage").struct[1].alias("coverage_1"),
+        )
+        .drop("coverage")
+        .write_parquet(Paths.ADR / "adr_datasets.parquet")
+    )
+
     return df
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
 def _fetch_dataset_info(
     context: AssetExecutionContext, adr_session: requests.Session, row: dict
 ) -> dict:
@@ -85,8 +107,10 @@ def _fetch_dataset_info(
         response.raise_for_status()
     except requests.HTTPError as http_err:
         context.log.error(f"HTTP error occurred: {http_err}")
+        return {}
     except Exception as err:
         context.log.error(f"Other error occurred: {err}")
+        return {}
     content = json.loads(response.content)
 
     return {
@@ -105,10 +129,12 @@ def _fetch_dataset_info(
 
 @asset
 def adr_descriptions(adr_datasets: pl.DataFrame) -> None:
+    outdir = Paths.ADR / "txt"
+    outdir.mkdir(parents=True, exist_ok=True)
+
     for item in adr_datasets.rows(named=True):
         with open(
-            Paths.ADR
-            / f"descriptions/{item['id']}-{item['origin_id']}-description.txt",
+            outdir / f"{item['id']}-{item['origin_id']}-description.txt",
             "w",
         ) as f:
             f.write(
