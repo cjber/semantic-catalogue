@@ -84,15 +84,8 @@ def adr_datasets(
         dataset = _fetch_dataset_info(context, adr_session, row)
         if dataset:
             datasets_list.append(dataset)
-    df = pl.DataFrame(datasets_list)
-    (
-        df.with_columns(
-            pl.col("coverage").struct[0].alias("coverage_0"),
-            pl.col("coverage").struct[1].alias("coverage_1"),
-        )
-        .drop("coverage")
-        .write_parquet(Paths.ADR / "adr_datasets.parquet")
-    )
+    df = pl.json_normalize(datasets_list)
+    df.write_parquet(Paths.ADR / "adr_datasets.parquet")
 
     return df
 
@@ -123,7 +116,7 @@ def _fetch_dataset_info(
         "keywords": content["summary"].get("keywords"),
         "abstract": content["summary"]["abstract"],
         "description": content.get("documentation", {}).get("description"),
-        "coverage": content["coverage"],
+        "publication_date": content["summary"].get("publicationDate"),
     }
 
 

@@ -95,7 +95,7 @@ class ADRLoader(BaseLoader):
                 "source": "ADR",
             }
 
-        date_created = metadata["coverage_1"][0]["distributionReleaseDate"]
+        date_created = metadata["publication_date"][0]
         date_created = (
             dateparser.parse(date_created).isoformat()  # type: ignore
             if isinstance(date_created, str)
