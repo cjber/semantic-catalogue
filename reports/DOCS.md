@@ -42,7 +42,7 @@ This approach ensures that users receive not only relevant search results but al
 
 ## Overview
 
-![]('./figs/system.png')
+![]('./reports/figs/system.png')
 
 ## Data flow
 
