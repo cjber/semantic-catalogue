@@ -82,18 +82,14 @@ class ADRLoader(BaseLoader):
         doc_id, origin_id, _ = Path(file_path).stem.split("-")
         metadata = (
             pl.scan_parquet(Paths.ADR / "adr_datasets.parquet")
-            .filter((pl.col("id") == doc_id) & (pl.col("origin_id") == origin_id))
+            .filter(
+                (pl.col("id") == int(doc_id)) & (pl.col("origin_id") == int(origin_id))
+            )
             .collect()[0]
             .to_dict(as_series=False)
         )
         if len(metadata["id"]) == 0:
-            return {
-                "title": "",
-                "id": f"{doc_id}-{origin_id}",
-                "url": "",
-                "date_created": "",
-                "source": "ADR",
-            }
+            return {}
 
         date_created = metadata["publication_date"][0]
         date_created = (
@@ -133,13 +129,8 @@ class UKDSLoader(BaseLoader):
             .to_dict(as_series=False)
         )
         if len(metadata["id"]) == 0:
-            return {
-                "title": "",
-                "id": doc_id,
-                "url": "",
-                "date_created": "",
-                "source": "UKDS",
-            }
+            return {}
+
         date_created = (
             dateparser.parse(metadata["date"][0]).isoformat()  # type: ignore
             if isinstance(metadata["date"][0], str)
