@@ -122,11 +122,3 @@ def generation_graph():
     workflow.add_edge("gen", "grade_generation")
     workflow.add_edge("grade_generation", END)
     return workflow.compile()
-
-
-search_app = search_graph()
-thread_id = 42
-q = "What is the capital of France?"
-
-out = search_app.invoke({"query": q}, config={"configurable": {"thread_id": thread_id}})
-[d.dict() for d in out["documents"]]
