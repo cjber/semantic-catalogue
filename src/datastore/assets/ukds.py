@@ -43,7 +43,7 @@ def ukds_identifiers() -> list[str]:
 
 
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
-def _fetch_metadata(context: AssetExecutionContext, identifier: int):
+def _fetch_metadata(context: AssetExecutionContext, identifier: str):
     metadata_url = (
         f"{BASE_URL}?verb=GetRecord&identifier={identifier}&metadataPrefix=ddi"
     )
@@ -63,7 +63,7 @@ def _fetch_metadata(context: AssetExecutionContext, identifier: int):
 
 @asset
 def ukds_datasets(
-    context: AssetExecutionContext, ukds_identifiers: list[int]
+    context: AssetExecutionContext, ukds_identifiers: list[str]
 ) -> pl.DataFrame:
     data = []
     for identifier in tqdm(ukds_identifiers):
