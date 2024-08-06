@@ -11,7 +11,7 @@ from dagster_openai import OpenAIResource
 from langchain_community.document_loaders import DirectoryLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
-from langchain_text_splitters import CharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pinecone import Pinecone, ServerlessSpec
 
 from src.common.settings import cfg
@@ -41,15 +41,15 @@ def _process_documents(
         )
         documents = loader.load()
         documents.extend(loader.load())
-        documents = [doc for doc in documents if doc.metadata is not {}]
+        documents = [doc for doc in documents if "id" in doc.metadata]
 
     with openai.get_client(context) as client:
         embeddings = OpenAIEmbeddings(
             client=client.embeddings, model=cfg.datastore.embed_model
         )
 
-    text_splitter = CharacterTextSplitter.from_tiktoken_encoder(
-        encoding="cl100k_base", chunk_size=100, chunk_overlap=0
+    text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+        chunk_size=100, chunk_overlap=0
     )
     docs = text_splitter.split_documents(documents)
 
