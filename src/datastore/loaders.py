@@ -82,9 +82,7 @@ class ADRLoader(BaseLoader):
         doc_id, origin_id, _ = Path(file_path).stem.split("-")
         metadata = (
             pl.scan_parquet(Paths.ADR / "adr_datasets.parquet")
-            .filter(
-                (pl.col("id") == int(doc_id)) & (pl.col("origin_id") == int(origin_id))
-            )
+            .filter((pl.col("id") == doc_id) & (pl.col("origin_id") == origin_id))
             .collect()[0]
             .to_dict(as_series=False)
         )
