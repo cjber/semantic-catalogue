@@ -18,13 +18,14 @@ class CDRCLoader(BaseLoader):
         if self.file_path.endswith(".pdf"):
             document = PDFMinerLoader(self.file_path).load()
             metadata = self._add_cdrc_pdf_metadata(self.file_path)
-            document[0].metadata |= metadata
+            document[0].metadata |= metadata | {"file_path": self.file_path}
             yield document[0]
         elif self.file_path.endswith(".txt"):
             with open(self.file_path, encoding="utf-8") as f:
+                content = f.read()
                 yield Document(
-                    page_content=f.read(),
-                    metadata={"source": self.file_path}
+                    page_content=content,
+                    metadata={"file_path": self.file_path}
                     | self._add_cdrc_txt_metadata(self.file_path),
                 )
 
@@ -71,9 +72,10 @@ class ADRLoader(BaseLoader):
 
     def lazy_load(self) -> Iterator[Document]:
         with open(self.file_path, encoding="utf-8") as f:
+            content = f.read()
             yield Document(
-                page_content=f.read(),
-                metadata={"source": self.file_path}
+                page_content=content,
+                metadata={"file_path": self.file_path}
                 | self._add_adr_metadata(self.file_path),
             )
 
@@ -110,9 +112,10 @@ class UKDSLoader(BaseLoader):
 
     def lazy_load(self) -> Iterator[Document]:
         with open(self.file_path, encoding="utf-8") as f:
+            content = f.read()
             yield Document(
-                page_content=f.read(),
-                metadata={"source": self.file_path}
+                page_content=content,
+                metadata={"file_path": self.file_path}
                 | self._add_ukds_metadata(self.file_path),
             )
 
