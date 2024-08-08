@@ -1,10 +1,11 @@
 [datastore]
 index_name = "data-catalogue"
-embed_model = "text-embedding-3-large"
-embed_dim = 3072
-chunk_size = 256
+host = "https://data-catalogue-qjckkzu.svc.aped-4627-b74a.pinecone.io"
+embed_model = "text-embedding-3-small"
+embed_dim = 1536
+chunk_size = 1024
 chunk_overlap = 32
 
 [model]
 llm = "gpt-3.5-turbo"
-top_k = 30
+top_k = 100
