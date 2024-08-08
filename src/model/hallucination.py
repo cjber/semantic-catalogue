@@ -22,7 +22,7 @@ structured_llm_grader = llm.with_structured_output(GradeHallucinations)
 
 system = """
 You are a grader assessing whether an LLM generation is grounded in / supported by a set of retrieved facts. \n 
-Give a binary score 'yes' or 'no'. 'Yes' means that the answer is grounded in / supported by the set of facts.
+Give a binary score 'yes' or 'no'. 'yes' means that the answer is grounded in / supported by the set of facts.
 """
 hallucination_prompt = ChatPromptTemplate.from_messages(
     [
@@ -32,3 +32,10 @@ hallucination_prompt = ChatPromptTemplate.from_messages(
 )
 
 hallucination_grader = hallucination_prompt | structured_llm_grader
+
+hallucination_grader.invoke(
+    {
+        "document": "8",
+        "generation": 'The dataset contains information on the top 8 most popular pizza toppings, which directly relates to the query for "pizza." Users interested in pizza preferences or trends may find this dataset relevant for ana lyzing popular topping choices. This dataset can provide insights into consumer preferences and help businesses i n the food industry make informed decisions regarding their pizza offerings.',
+    }
+)

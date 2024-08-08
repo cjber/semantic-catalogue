@@ -6,6 +6,7 @@ from langchain_openai import ChatOpenAI
 from src.common.settings import cfg
 
 _ = load_dotenv()
+
 human = """
 A user has queried a data catalogue, which has returned a relevant dataset.
 
