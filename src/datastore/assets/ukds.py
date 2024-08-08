@@ -111,6 +111,8 @@ def ukds_datasets(
 def ukds_abstracts(ukds_datasets: pl.DataFrame):
     outdir = Paths.UKDS / "txt"
     outdir.mkdir(parents=True, exist_ok=True)
+    for file in outdir.glob("*.txt"):
+        file.unlink()
 
     for row in ukds_datasets.rows(named=True):
         id = row["url"].split("=")[-1]

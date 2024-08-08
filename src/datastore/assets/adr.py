@@ -124,6 +124,8 @@ def _fetch_dataset_info(
 def adr_descriptions(adr_datasets: pl.DataFrame) -> None:
     outdir = Paths.ADR / "txt"
     outdir.mkdir(parents=True, exist_ok=True)
+    for file in outdir.glob("*.txt"):
+        file.unlink()
 
     for item in adr_datasets.rows(named=True):
         with open(

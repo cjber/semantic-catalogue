@@ -37,6 +37,8 @@ def cdrc_metadata(context: AssetExecutionContext) -> list[dict]:
 def cdrc_notes(cdrc_metadata: list[dict]):
     outdir = Paths.CDRC / "txt"
     outdir.mkdir(parents=True, exist_ok=True)
+    for file in outdir.glob("*.txt"):
+        file.unlink()
 
     df = pl.DataFrame(cdrc_metadata).drop(["resources", "tags", "extras"])
     df.write_parquet(Paths.CDRC / "cdrc_metadata.parquet")
@@ -96,6 +98,8 @@ def cdrc_pdfs(
 ):
     outdir = Paths.CDRC / "pdf"
     outdir.mkdir(parents=True, exist_ok=True)
+    for file in outdir.glob("*.pdf"):
+        file.unlink()
 
     for item in tqdm(cdrc_resources.rows(named=True)):
         context.log.info(f"Processing {item['resource_url']}...")
