@@ -9,6 +9,7 @@ with open("./config/config.toml", "rb") as f:
 
 class DataStoreSettings(BaseSettings):
     index_name: str = Field(min_length=1)
+    host: str = Field(min_length=1)
     embed_model: str = Field(min_length=1)
     embed_dim: int = Field(gt=0, le=10_000)
     chunk_size: int = Field(gt=0, le=10_000)
