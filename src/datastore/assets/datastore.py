@@ -93,6 +93,11 @@ def pinecone_index(context: AssetExecutionContext, openai: OpenAIResource):
     )
     documents = text_splitter.split_documents(documents)
 
+    for doc in documents:
+        doc.page_content = (
+            f"Dataset Title: {doc.metadata["title"]}\n\n{doc.page_content}"
+        )
+
     bm25_encoder = BM25Encoder()
     bm25_encoder.fit([doc.page_content for doc in documents])
     bm25_encoder.dump(str(Paths.DATA / "bm25_values.json"))

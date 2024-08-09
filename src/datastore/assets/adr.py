@@ -7,7 +7,7 @@ from dagster import AssetExecutionContext, asset
 from tenacity import retry, stop_after_attempt, wait_exponential
 from tqdm import tqdm
 
-from src.common.utils import Paths
+from src.common.utils import Paths, clean_string
 
 PAGE_SIZE = 100
 API_VERSION = "2.0"
@@ -132,8 +132,4 @@ def adr_descriptions(adr_datasets: pl.DataFrame) -> None:
             outdir / f"{item['id']}-{item['origin_id']}-description.txt",
             "w",
         ) as f:
-            f.write(
-                f"Dataset Title: {item['name']}"
-                f"\n\nDescription: \n\n{item['description']}"
-                f"\n\nAbstract: \n\n{item['abstract']}"
-            )
+            f.write(clean_string(f"{item['description']}\n{item['abstract']}"))

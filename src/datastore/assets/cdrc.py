@@ -8,7 +8,7 @@ from dagster import AssetExecutionContext, asset
 from dotenv import load_dotenv
 from tqdm import tqdm
 
-from src.common.utils import Paths
+from src.common.utils import Paths, clean_string
 
 load_dotenv()
 
@@ -45,11 +45,7 @@ def cdrc_notes(cdrc_metadata: list[dict]):
 
     for item in df.rows(named=True):
         with open(Paths.CDRC / "txt" / f"{item['id']}-notes.txt", "w") as f:
-            f.write(
-                f"Dataset Title: {item['title']}"
-                "\n\nDescription: \n\n"
-                f"{re.sub('<[^<]+?>','', item['notes'])}"
-            )
+            f.write(clean_string(item["notes"]))
 
 
 @asset

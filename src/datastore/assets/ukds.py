@@ -7,7 +7,7 @@ from dagster import AssetExecutionContext, asset
 from tenacity import retry, stop_after_attempt, wait_exponential
 from tqdm import tqdm
 
-from src.common.utils import Paths
+from src.common.utils import Paths, clean_string
 
 BASE_URL = "https://oai.ukdataservice.ac.uk:8443/oai/provider"
 PARAMS = {"verb": "ListIdentifiers", "metadataPrefix": "ddi", "set": "DataCollections"}
@@ -121,4 +121,4 @@ def ukds_abstracts(ukds_datasets: pl.DataFrame):
             "",
         )
         with open(outdir / f"{id}-abstract.txt", "w") as f:
-            f.write(f"Dataset Title: {row['title']}" f"\n\nDescription: \n\n{abstract}")
+            f.write(clean_string(abstract))

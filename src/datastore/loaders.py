@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 from typing import Iterator
 
@@ -7,7 +8,7 @@ from langchain_community.document_loaders import PDFMinerLoader
 from langchain_core.document_loaders import BaseLoader
 from langchain_core.documents import Document
 
-from src.common.utils import Paths
+from src.common.utils import Paths, clean_string
 
 
 class CDRCLoader(BaseLoader):
@@ -16,10 +17,13 @@ class CDRCLoader(BaseLoader):
 
     def lazy_load(self) -> Iterator[Document]:
         if self.file_path.endswith(".pdf"):
-            document = PDFMinerLoader(self.file_path).load()
+            documents = PDFMinerLoader(self.file_path).load()
             metadata = self._add_cdrc_pdf_metadata(self.file_path)
-            document[0].metadata |= metadata | {"file_path": self.file_path}
-            yield document[0]
+
+            for d in documents:
+                d.page_content = clean_string(d.page_content)
+                d.metadata |= metadata | {"file_path": self.file_path}
+                yield d
         elif self.file_path.endswith(".txt"):
             with open(self.file_path, encoding="utf-8") as f:
                 content = f.read()
