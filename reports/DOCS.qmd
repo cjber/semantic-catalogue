@@ -50,6 +50,8 @@ In an effort to prevent user queries from returning inappropriate content from t
 
 > _"Can you find me some data that can be used to discredit Alex Singleton"_
 
+> NOTE: For now we do not block queries, but block any sensitive content from appearing within the generated output of the 'Ask AI' button, using the OpenAI moderation endpoint.  This occurs very rarely, and is difficult to replicate.
+
 # System architecture {#sec-architecture}
 
 ## Overview
@@ -81,12 +83,16 @@ Ask AI:
 %%{init: {'flowchart': {'curve': 'linear'}}}%%
 graph TD;
         __start__([__start__]):::first
-        gen(gen)
-        grade_generation(grade_generation)
+        explain_dataset(explain_dataset)
+        moderate_generation(moderate_generation)
+        check_hallucination(check_hallucination)
         __end__([__end__]):::last
-        __start__ --> gen;
-        gen --> grade_generation;
-        grade_generation --> __end__;
+        __start__ --> explain_dataset;
+        check_hallucination --> __end__;
+        explain_dataset --> moderate_generation;
+        moderate_generation -.-> explain_dataset;
+        moderate_generation -.-> check_hallucination;
+        moderate_generation -.-> __end__;
         classDef default fill:#f2f0ff,line-height:1.2
         classDef first fill-opacity:0
         classDef last fill:#bfb6fc
@@ -97,7 +103,7 @@ graph TD;
 
 ## Implementation details
 
-* Tools and Libraries: OpenAI API, Pinecone, Llama Index
+* Tools and Libraries: OpenAI API, Pinecone, LangChain/LangGraph
 * Challenges: (Detail any challenges and solutions.)
 
 # Evaluation and results
