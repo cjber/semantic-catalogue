@@ -1,10 +1,8 @@
 from typing import TypedDict
 
 from dotenv import load_dotenv
-from langchain.retrievers import (
-    ContextualCompressionRetriever,
-    PineconeHybridSearchRetriever,
-)
+from langchain.retrievers import ContextualCompressionRetriever
+from langchain_community.retrievers import PineconeHybridSearchRetriever
 
 # from langchain.retrievers.document_compressors import FlashrankRerank
 from langchain_core.documents import Document
@@ -60,13 +58,13 @@ def create_retriever():
     pc = Pinecone()
     index = pc.Index(cfg.datastore.index_name, host=cfg.datastore.host)
     embeddings = OpenAIEmbeddings(model=cfg.datastore.embed_model)
-    retriever = PineconeHybridSearchRetriever(
+    return PineconeHybridSearchRetriever(
         embeddings=embeddings,
         sparse_encoder=bm25_encoder,
         index=index,
         top_k=cfg.model.top_k,
+        alpha=cfg.model.alpha,
     )
-    return retriever
 
 
 def retrieve(state, retriever):
