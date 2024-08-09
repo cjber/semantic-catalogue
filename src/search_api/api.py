@@ -18,30 +18,30 @@ def index() -> dict[str, str]:
 
 @app.post("/query")
 async def query(q: str) -> dict[str, Union[UUID, str, list[dict]]]:
-    results_id = uuid4()
-    out = search(query=q, thread_id=results_id)
+    thread_id = uuid4()
+    out = search(query=q, thread_id=thread_id)
 
     docs_dict = [d.dict() for d in out["documents"]]
-    document_store[results_id] = docs_dict
-    query_mapping[results_id] = q
-    return {"results_id": results_id, "query": q, "documents": docs_dict}
+    document_store[thread_id] = docs_dict
+    query_mapping[thread_id] = q
+    return {"thread_id": thread_id, "query": q, "documents": docs_dict}
 
 
-@app.get("/explain/{results_id}")
-async def explain(results_id: UUID, docid: int) -> dict:
-    doc_dict = document_store[results_id][docid]
+@app.get("/explain/{thread_id}")
+async def explain(thread_id: UUID, docid: int) -> dict:
+    doc_dict = document_store[thread_id][docid]
     document = Document(
         page_content=doc_dict["page_content"],
         metadata=doc_dict["metadata"],
     )
-    query = query_mapping[results_id]
-    out = generate(query=query, document=document, thread_id=results_id)
+    query = query_mapping[thread_id]
+    out = generate(query=query, document=document, thread_id=thread_id)
     generation = out["generation"]
 
     return {
         "generation": generation,
         "metadata": {
-            "results_id": results_id,
+            "thread_id": thread_id,
             "query": query,
             "related_dataset": doc_dict,
         },
