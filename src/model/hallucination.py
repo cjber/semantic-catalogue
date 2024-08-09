@@ -32,10 +32,3 @@ hallucination_prompt = ChatPromptTemplate.from_messages(
 )
 
 hallucination_grader = hallucination_prompt | structured_llm_grader
-
-hallucination_grader.invoke(
-    {
-        "document": "8",
-        "generation": 'The dataset contains information on the top 8 most popular pizza toppings, which directly relates to the query for "pizza." Users interested in pizza preferences or trends may find this dataset relevant for ana lyzing popular topping choices. This dataset can provide insights into consumer preferences and help businesses i n the food industry make informed decisions regarding their pizza offerings.',
-    }
-)
