@@ -2,11 +2,19 @@ from typing import Union
 from uuid import UUID, uuid4
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from langchain_core.documents import Document
 
 from src.model.model import generate, search
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 document_store = {}
 query_mapping = {}
 
@@ -36,13 +44,6 @@ async def explain(thread_id: UUID, docid: int) -> dict:
     )
     query = query_mapping[thread_id]
     out = generate(query=query, document=document, thread_id=thread_id)
-    generation = out["generation"]
+    out["document"] = doc_dict
 
-    return {
-        "generation": generation,
-        "metadata": {
-            "thread_id": thread_id,
-            "query": query,
-            "related_dataset": doc_dict,
-        },
-    }
+    return out
