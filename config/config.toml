@@ -8,5 +8,5 @@ chunk_overlap = 32
 
 [model]
 llm = "gpt-4o-mini"
-top_k = 100
+top_k = 500
 alpha = 0.75
