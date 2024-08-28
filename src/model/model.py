@@ -1,23 +1,27 @@
+import logging
 from typing import TypedDict
 
 from dotenv import load_dotenv
-from langchain.retrievers import ContextualCompressionRetriever
 from langchain_community.retrievers import PineconeHybridSearchRetriever
-
-# from langchain.retrievers.document_compressors import FlashrankRerank
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langgraph.graph import END, START, StateGraph
 from pinecone import Pinecone
 from pinecone_text.sparse import BM25Encoder
 
 from src.common.settings import cfg
-from src.common.utils import Paths, pretty_print_docs
+from src.common.utils import Paths
+from src.model.citations import answer_citations, format_docs_with_id
 from src.model.hallucination import hallucination_grader
 from src.model.moderation import moderate
-from src.model.rag import rag_chain
 
 _ = load_dotenv()
+
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class SearchState(TypedDict):
@@ -29,8 +33,17 @@ class GenerationState(TypedDict):
     query: str
     document: str
     generation: str
+    chunks: list[dict]
+
     hallucination: str
     inappropriate: str
+
+
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=512,
+    separators=["\n\n", "\n", ". "],
+    keep_separator=False,
+)
 
 
 def _group_by_document(documents):
@@ -44,10 +57,10 @@ def _group_by_document(documents):
 
     out_nodes = []
     for doc in grouped_id.values():
-        content = "\n--------------------\n".join([d.page_content for d in doc])
-        # scores = [d.metadata["score"] for d in doc]
+        content = "\n\n".join([d.page_content for d in doc])
+        scores = [d.metadata["score"] for d in doc]
         document = Document(
-            page_content=content, metadata=doc[0].metadata  # | {"score": max(scores)}
+            page_content=content, metadata=doc[0].metadata | {"score": max(scores)}
         )
         out_nodes.append(document)
     return out_nodes
@@ -68,7 +81,7 @@ def create_retriever():
 
 
 def retrieve(state, retriever):
-    print("---RETRIEVE---")
+    logging.info("Starting retrieval process...")
     query = state["query"]
 
     documents = retriever.invoke(query)
@@ -76,51 +89,40 @@ def retrieve(state, retriever):
     return {"documents": documents, "query": query}
 
 
-# def compress(state, retriever):
-#     print("---COMPRESS---")
-#     query = state["query"]
-#
-#     compressor = FlashrankRerank(top_n=cfg.model.top_k)
-#     compression_retriever = ContextualCompressionRetriever(
-#         base_compressor=compressor, base_retriever=retriever
-#     )
-#
-#     documents = compression_retriever.invoke(query)
-#     return {"documents": documents, "query": query}
-
-
 def explain_dataset(state):
-    print("---GENERATE---")
+    logging.info("Starting explain generation...")
     query = state["query"]
     document = state["document"]
 
-    generation = rag_chain.invoke({"query": query, "context": document})
-    return {"query": query, "document": document, "generation": generation}
+    chunks = text_splitter.split_documents([document])
+    docs = format_docs_with_id(chunks)
+
+    generation = answer_citations.invoke({"query": query, "context": docs})
+
+    return {
+        "query": query,
+        "document": document,
+        "chunks": [c.dict() for c in chunks],
+    } | generation
 
 
 def moderate_generation(state):
-    print("---MODERATE GENERATION---")
-    query = state["query"]
-    document = state["document"]
+    logging.info("Starting moderation...")
     generation = state["generation"]
 
     moderation = moderate.invoke(generation)
     if moderation["output"] != generation:
-        print("---INAPPROPRIATE---")
-        state = {
-            "query": query,
-            "document": document,
-            "generation": "Inappropriate content found in generation.",
-            "generation_moderated": moderation["output"],
-            "inappropriate": generation,
-        }
+        logging.warning("Inappropriate content found in generation")
+        state["generation"] = "Inappropriate content found in generation."
+        state["inappropriate"] = generation
     else:
-        print("---APPROPRIATE---")
-        return {"query": query, "document": document, "generation": generation}
+        logging.info("Generation content is appropriate")
+
+    return state
 
 
 def check_hallucination(state):
-    print("---CHECK HALLUCINATION---")
+    logging.info("Starting hallucination check process...")
     query = state["query"]
     document = state["document"]
     generation = state["generation"]
@@ -129,16 +131,13 @@ def check_hallucination(state):
         {"document": document, "generation": generation}
     )
     if score.binary_score == "yes":
-        print("---NO HALLUCINATATION---")
-        return {"query": query, "document": document, "generation": generation}
+        logging.info("No hallucination found in generation")
+        state["generation"] = generation
     else:
-        print("---HALLUCINATATION---")
-        return {
-            "query": query,
-            "document": document,
-            "generation": "Hallucination found in generation.",
-            "hallucination": generation,
-        }
+        logging.warning("Hallucination found in generation")
+        state["generation"] = "Hallucination found in generation."
+
+    return state
 
 
 def skip_hallucination(state):
@@ -177,23 +176,25 @@ def generation_graph():
 
 def search(query, thread_id):
     search = search_graph()
-    search_out = search.invoke(
+    output = search.invoke(
         {"query": query}, config={"configurable": {"thread_id": thread_id}}
     )
-    return search_out
+    logging.info("Search done")
+    return output
 
 
 def generate(query, document, thread_id):
     gen = generation_graph()
-    gen_out = gen.invoke(
+    output = gen.invoke(
         {"query": query, "document": document},
         config={"configurable": {"thread_id": thread_id}},
     )
-    return gen_out
+    logging.info("Generation done")
+    return output
 
 
 if __name__ == "__main__":
-    out = search(query="space travel", thread_id="1234")
-    out_gen = generate(
-        query="space travel", document=out["documents"][0], thread_id="1234"
-    )
+    query = "farming in estonia"
+    out = search(query=query, thread_id="1234")
+
+    out_gen = generate(query=query, document=out["documents"][0], thread_id="1234")
