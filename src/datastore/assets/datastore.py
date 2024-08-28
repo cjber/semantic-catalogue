@@ -100,7 +100,7 @@ def pinecone_index(context: AssetExecutionContext, openai: OpenAIResource):
 
     bm25_encoder = BM25Encoder()
     bm25_encoder.fit([doc.page_content for doc in documents])
-    bm25_encoder.dump(str(Paths.DATA / "bm25_values.json"))
+    bm25_encoder.dump("bm25/bm25_values.json")
 
     vectorstore = PineconeVectorStore(
         index_name=cfg.datastore.index_name, embedding=embeddings, text_key="context"

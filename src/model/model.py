@@ -67,7 +67,7 @@ def _group_by_document(documents):
 
 
 def create_retriever():
-    bm25_encoder = BM25Encoder().load(str(Paths.DATA / "bm25_values.json"))
+    bm25_encoder = BM25Encoder().load("bm25/bm25_values.json")
     pc = Pinecone()
     index = pc.Index(cfg.datastore.index_name, host=cfg.datastore.host)
     embeddings = OpenAIEmbeddings(model=cfg.datastore.embed_model)
