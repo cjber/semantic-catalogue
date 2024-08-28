@@ -1,0 +1,28 @@
+.top-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.source-logo {
+  width: 50px; /* Adjust the size of the logos */
+}
+
+.result {
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: transparent; /* Use theme background instead */
+}
+
+h2 {
+  font-size: 1.2em;
+  margin: 0;
+  color: white; /* Ensure headings are visible in dark mode */
+}
+
+p {
+  margin: 8px 0;
+  color: #b0bec5; /* Light grey for paragraph text */
+}
