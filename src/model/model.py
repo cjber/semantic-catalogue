@@ -11,7 +11,6 @@ from pinecone import Pinecone
 from pinecone_text.sparse import BM25Encoder
 
 from src.common.settings import cfg
-from src.common.utils import Paths
 from src.model.citations import answer_citations, format_docs_with_id
 from src.model.hallucination import hallucination_grader
 from src.model.moderation import moderate
