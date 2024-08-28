@@ -1,10 +1,9 @@
 ---
-title: {{Semantic Catalogue}}
-emoji: {{emoji}}
-colorFrom: {{colorFrom}}
-colorTo: {{colorTo}}
-sdk: {{docker}}
-sdk_version: "{{sdkVersion}}"
+title: Semantic Catalogue
+emoji: rocket
+colorFrom: red
+colorTo: grey
+sdk: docker
 app_file: src/search_api/api.py
 pinned: false
 ---
