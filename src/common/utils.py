@@ -34,14 +34,11 @@ def pretty_print_docs(docs):
 
 
 def clean_string(text: str) -> str:
-    # remove content between /* ... */ (CSS or other style definitions)
     text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
-    # remove anything within XML or HTML tags
     text = re.sub(r"<.*?>", "", text)
-    # remove extra spaces
-    text = re.sub(r"\s+", " ", text).strip()
-
-    # remove line breaks where there's no punctuation before the break
-    # match a lowercase letter or a word followed by a newline, and then another lowercase letter
-    text = re.sub(r"(\w)(\s*\n\s*)(\w)", r"\1 \3", text)
+    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"\n\s*\n", " <PARAGRAPH_BREAK> ", text)
+    text = re.sub(r"\s*\n\s*", " ", text)
+    text = text.replace(" <PARAGRAPH_BREAK> ", "\n\n")
+    text = text.strip()
     return text
