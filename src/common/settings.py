@@ -18,7 +18,7 @@ class DataStoreSettings(BaseSettings):
 
 class ModelSettings(BaseSettings):
     llm: str = Field(min_length=1)
-    top_k: int = Field(gt=0, le=100)
+    top_k: int = Field(gt=0, le=15_000)
     alpha: float = Field(ge=0.0, le=1.0)
 
 
