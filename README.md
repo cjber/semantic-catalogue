@@ -1,8 +1,7 @@
 ---
 title: Semantic Catalogue
-emoji: rocket
 colorFrom: red
-colorTo: grey
+colorTo: gray
 sdk: docker
 app_file: src/search_api/api.py
 pinned: false
