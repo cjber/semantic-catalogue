@@ -55,7 +55,7 @@ Edit the `config/config.toml` file to customise model settings.
 
 Run the system through an API using:
 
-   ```bash
+```bash
 fastapi run src/search_system/api.py
 ```
 
