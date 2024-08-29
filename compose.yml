@@ -14,7 +14,7 @@ services:
     restart: always
     build:
       context: .
-      dockerfile: Containerfile
+      dockerfile: Containerfile.dagster
     image: datastore
     security_opt:
       - "label:disable"
@@ -44,7 +44,7 @@ services:
     container_name: datastore-server
     build:
       context: .
-      dockerfile: Containerfile
+      dockerfile: Containerfile.dagster
     entrypoint:
       - dagster-webserver
       - -h
@@ -73,7 +73,7 @@ services:
     restart: on-failure
     build:
       context: .
-      dockerfile: Containerfile
+      dockerfile: Containerfile.dagster
     entrypoint:
       - dagster-daemon
       - run
@@ -93,7 +93,35 @@ services:
       - datastore-postgresql
       - datastore-code
 
+  frontend-fastapi:
+    container_name: frontend-fastapi
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Containerfile.fastapi
+    expose:
+      - "8000"
+    ports:
+      - 8000:8000
+    networks:
+      - frontend-network
+
+  frontend-node:
+    container_name: frontend-node
+    restart: on-failure
+    build: ./frontend
+    dockerfile: Dockerfile
+    expose:
+      - "8001"
+    ports:
+      - 8001:8001
+    networks:
+      - frontend-network
+
 networks:
   datastore-network:
     driver: bridge
     name: datastore-network
+  frontend-network:
+    driver: bridge
+    name: frontend-network
