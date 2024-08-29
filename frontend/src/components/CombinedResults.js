@@ -225,13 +225,17 @@ const CombinedResults = ({ results = [], threadId }) => {
                     maxHeight: expandedDocs[index] ? "100em" : "5em", // Control max height for transition
                     transition: "color 0.5s ease, max-height 0.5s ease", // Add transition for color and max-height
                   }}
-  dangerouslySetInnerHTML={{
-    __html: doc.page_content?.startsWith("Dataset Title:")
-      ? doc.page_content.slice(doc.metadata.title.length + 15, 5000).replace(/\n/g, '<p></p>')
-      : (doc.page_content || "No preview available.").replace(/\n/g, '<p></p>')
-  }}
-                >
-                </Typography>
+                  dangerouslySetInnerHTML={{
+                    __html: doc.page_content?.startsWith("Dataset Title:")
+                      ? doc.page_content
+                          .slice(doc.metadata.title.length + 15, 5000)
+                          .replace(/\n/g, "<p></p>")
+                      : (doc.page_content || "No preview available.").replace(
+                          /\n/g,
+                          "<p></p>",
+                        ),
+                  }}
+                ></Typography>
 
                 {/* Explain Feature */}
                 <Box sx={{ mt: 2 }}>
