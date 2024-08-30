@@ -50,23 +50,24 @@ To contribute, please follow the instructions below:
 
 Edit the `config/config.toml` file to customise model settings.
 
+## Run Project
 
-### Run API
-
-Run the system through an API using:
+The project is fully containerised using `podman`/`docker` `compose`. To run the full system execute:
 
 ```bash
-fastapi run src/search_system/api.py
+podman compose up -d
 ```
+
+### Semantic Catalogue Search
+
+Once up and running, the semantic catalogue search may be accessed at `localhost:8001`.
 
 ### Run Dagster pipeline
 
-```bash
-podman compose up --build -d
+The Dagster UI is available at `localhost:3000`. You will need to adjust the Auto Materialize and Sensor settings to start the automation.
 
-```
 
-> WARNING: This is not intended for public use; requires access to a private database.
+> WARNING: This project is not intended for public use; requires access to a private database.
 
 ## Documentation
 
