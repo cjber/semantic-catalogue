@@ -1,12 +1,3 @@
----
-title: Semantic Catalogue
-colorFrom: red
-colorTo: gray
-sdk: docker
-app_file: src/search_api/api.py
-pinned: false
----
-
 # Semantic Catalogue
 
 ## Overview
