@@ -2,7 +2,7 @@
 title: "Semantic Data Catalogue"
 format: 
   PrettyPDF-pdf: default
-  markdown: default
+  gfm: default
 execute:
   freeze: auto
   echo: false

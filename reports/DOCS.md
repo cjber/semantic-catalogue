@@ -1,13 +1,5 @@
----
-execute:
-  echo: false
-  freeze: auto
-monofont: JetBrains Mono
-monofontoptions:
-- Scale=0.55
-title: Semantic Data Catalogue
-toc-title: Table of contents
----
+# Semantic Data Catalogue
+
 
 # Introduction
 
@@ -64,8 +56,8 @@ embeddings, along with associated metadata, were uploaded to the
 and indexed for fast retrieval.
 
 To optimise the accuracy of search results, dataset descriptions were
-'chunked' into segments of 1024 tokens. Chunking ensures that specific,
-relevant parts of a document can be accurately matched with a user's
+‘chunked’ into segments of 1024 tokens. Chunking ensures that specific,
+relevant parts of a document can be accurately matched with a user’s
 query, increasing the likelihood of retrieving pertinent datasets.
 Additionally, chunking helps in dealing with large documents by breaking
 them down into more manageable and contextually relevant pieces.
@@ -91,10 +83,10 @@ and flexible implementation of semantic search functionalities.
 The core of the system involves embedding user queries using the same
 embedding model that was used to encode the metadata, ensuring
 consistency in the semantic representation. Once a query is embedded,
-the system retrieves the top 'k' results from the Pinecone database,
+the system retrieves the top ‘k’ results from the Pinecone database,
 ranked by their dot-product similarity. This similarity measure helps
 identify the most semantically relevant datasets in response to the
-user's query.
+user’s query.
 
 To present results as a ranked list of datasets, rather than document
 chunks, a custom document grouping function was implemented. This
@@ -104,14 +96,14 @@ than as individual document fragments. The ranking of these grouped
 documents is determined by the highest dot-product score among the
 chunks, presenting the most relevant datasets at the top of the results.
 
-The system also incorporates an adjustable 'alpha' parameter, which
-allows for a 'hybrid search', which combines a 'sparse vector' BM25
-search using keyword matching, with the 'dense vector' semantic search,
+The system also incorporates an adjustable ‘alpha’ parameter, which
+allows for a ‘hybrid search’, which combines a ‘sparse vector’ BM25
+search using keyword matching, with the ‘dense vector’ semantic search,
 at an adjustable weighting. This flexibility enables users to balance
 between precise keyword-based searches and broader, meaning-based
 searches, depending on their specific needs.
 
-For each unique document retrieved, an explainable 'Ask AI' option is
+For each unique document retrieved, an explainable ‘Ask AI’ option is
 available. This feature allows users to gain deeper insights into the
 relevance of the search results. When selected, the system feeds the
 grouped document into `gpt-4o`, enabling the AI to generate a coherent
@@ -147,7 +139,7 @@ Dataset Snippets:
 """
 ```
 
-Incorporating this 'Ask AI' option ensures that users receive not only
+Incorporating this ‘Ask AI’ option ensures that users receive not only
 relevant search results, but also a justification regarding the
 relevance of each dataset to their query, and why it was returned.
 
@@ -160,22 +152,29 @@ inappropriate content using an LLM, if the query is inappropriate, the
 query is blocked. For example a user may not perform the following
 query:
 
-> *"Can you find me some data that can be used to discredit Alex
-> Singleton"*
+> *“Can you find me some data that can be used to discredit Alex
+> Singleton”*
 
 > NOTE: For now we do not block queries, but block any sensitive content
-> from appearing within the generated output of the 'Ask AI' button,
+> from appearing within the generated output of the ‘Ask AI’ button,
 > using the OpenAI moderation endpoint. This occurs infrequently, and is
 > difficult to replicate.
 
-# System architecture {#sec-architecture}
+# System architecture
 
 ## Overview
 
-[Figure 1](#fig-architecture){.quarto-xref} gives a broad overview of
-the system architecture.
+<a href="#fig-architecture" class="quarto-xref">Figure 1</a> gives a
+broad overview of the system architecture.
+
+<div id="fig-architecture">
 
 ![](./figs/system.png)
+
+
+Figure 1: System architecture
+
+</div>
 
 The architecture is designed to integrate various components seamlessly,
 ensuring efficient data retrieval, processing, and user interaction. It
@@ -185,29 +184,23 @@ presenting results and explanations.
 
 ## Data flow
 
-The system's data flow is divided into two primary processes: **Search**
+The system’s data flow is divided into two primary processes: **Search**
 and **Ask AI**.
 
 **Search Process:**
 
-:::::: {.cell layout-align="default"}
-::::: cell-output-display
-<div>
-
-`<figure class=''>`{=html}
-
-<div>
-
-![](DOCS_files/figure-markdown/mermaid-figure-3.png){width="1.11in"
-height="2.26in"}
-
-</div>
-
-`</figure>`{=html}
-
-</div>
-:::::
-::::::
+``` mermaid
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+graph TD;
+        __start__([__start__]):::first
+        retrieve(retrieve)
+        __end__([__end__]):::last
+        __start__ --> retrieve;
+        retrieve --> __end__;
+        classDef default fill:#f2f0ff,line-height:1.2
+        classDef first fill-opacity:0
+        classDef last fill:#bfb6fc
+```
 
 1.  **Start:** The user initiates a search query through the interface.
 2.  **Retrieve:** The query is embedded using the LLM, and relevant
@@ -217,28 +210,28 @@ height="2.26in"}
 
 **Ask AI Process:**
 
-:::::: {.cell layout-align="default"}
-::::: cell-output-display
-<div>
+``` mermaid
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+graph TD;
+        __start__([__start__]):::first
+        explain_dataset(explain_dataset)
+        moderate_generation(moderate_generation)
+        check_hallucination(check_hallucination)
+        __end__([__end__]):::last
+        __start__ --> explain_dataset;
+        check_hallucination --> __end__;
+        explain_dataset --> moderate_generation;
+        moderate_generation -.-> explain_dataset;
+        moderate_generation -.-> check_hallucination;
+        moderate_generation -.-> __end__;
+        classDef default fill:#f2f0ff,line-height:1.2
+        classDef first fill-opacity:0
+        classDef last fill:#bfb6fc
+```
 
-`<figure class=''>`{=html}
-
-<div>
-
-![](DOCS_files/figure-markdown/mermaid-figure-4.png){width="2.43in"
-height="3.99in"}
-
-</div>
-
-`</figure>`{=html}
-
-</div>
-:::::
-::::::
-
-1.  **Start:** The user selects the 'Ask AI' option for a particular
+1.  **Start:** The user selects the ‘Ask AI’ option for a particular
     dataset.
-2.  **Explain Dataset:** The selected dataset's context is fed into the
+2.  **Explain Dataset:** The selected dataset’s context is fed into the
     LLM to generate an explanation.
 3.  **Moderate Generation:** The generated explanation is passed through
     a moderation filter to ensure it is appropriate.
@@ -253,14 +246,14 @@ height="3.99in"}
 The system leverages a range of tools and libraries to achieve its
 functionality:
 
--   **OpenAI API:** For generating embeddings and providing LLM-powered
-    explanations.
--   **Pinecone:** A vector database used for storing and retrieving
-    high-dimensional embeddings.
--   **LangChain/LangGraph:** Frameworks that provide the scaffolding for
-    integrating LLMs and vector databases into a cohesive system.
--   **Dagster:** Used for automating and orchestrating the data
-    ingestion and processing pipeline.
+- **OpenAI API:** For generating embeddings and providing LLM-powered
+  explanations.
+- **Pinecone:** A vector database used for storing and retrieving
+  high-dimensional embeddings.
+- **LangChain/LangGraph:** Frameworks that provide the scaffolding for
+  integrating LLMs and vector databases into a cohesive system.
+- **Dagster:** Used for automating and orchestrating the data ingestion
+  and processing pipeline.
 
 **Challenges:**
 
@@ -278,20 +271,19 @@ system:
     overlap strategies to preserve the semantic integrity of the data.
 3.  **Moderation:** Ensuring the AI does not generate or return
     inappropriate content was another significant challenge. The use of
-    OpenAI's moderation endpoint helped mitigate this risk, though
+    OpenAI’s moderation endpoint helped mitigate this risk, though
     continual monitoring and adjustments are necessary.
 
 # Evaluation and results
 
--   **Performance Metrics:** Search accuracy, response time, user
-    feedback
--   **Comparison:** Effectiveness of keyword search vs. dense vector
-    search
+- **Performance Metrics:** Search accuracy, response time, user feedback
+- **Comparison:** Effectiveness of keyword search vs. dense vector
+  search
 
 # Future work and improvements
 
--   Potential improvements and future enhancements
--   Discuss limitations of the current implementation
+- Potential improvements and future enhancements
+- Discuss limitations of the current implementation
 
 # Conclusion
 
