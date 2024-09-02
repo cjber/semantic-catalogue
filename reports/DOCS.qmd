@@ -1,7 +1,8 @@
 ---
 title: "Semantic Data Catalogue"
 format: 
-  PrettyPDF-pdf: default
+  PrettyPDF-pdf:
+    papersize: A4
   gfm: default
 execute:
   freeze: auto
@@ -90,21 +91,28 @@ The architecture is designed to integrate various components seamlessly, ensurin
 
 ## Data flow
 
+```{python}
+import logging 
+
+from IPython.display import Image, display
+
+from src.model.model import search_graph, generation_graph
+
+logging.getLogger().setLevel(logging.ERROR)
+```
+
 The system's data flow is divided into two primary processes: **Search** and **Ask AI**.
 
 **Search Process:**
 
-```{mermaid}
-%%{init: {'flowchart': {'curve': 'linear'}}}%%
-graph TD;
-        __start__([__start__]):::first
-        retrieve(retrieve)
-        __end__([__end__]):::last
-        __start__ --> retrieve;
-        retrieve --> __end__;
-        classDef default fill:#f2f0ff,line-height:1.2
-        classDef first fill-opacity:0
-        classDef last fill:#bfb6fc
+```{python}
+#| fig-cap: "Search process graph"
+
+display(
+    Image(
+        search_graph().get_graph().draw_mermaid_png(), width=70
+    )
+)
 ```
 
 1. **Start:** The user initiates a search query through the interface.
@@ -113,23 +121,14 @@ graph TD;
 
 **Ask AI Process:**
 
-```{mermaid}
-%%{init: {'flowchart': {'curve': 'linear'}}}%%
-graph TD;
-        __start__([__start__]):::first
-        explain_dataset(explain_dataset)
-        moderate_generation(moderate_generation)
-        check_hallucination(check_hallucination)
-        __end__([__end__]):::last
-        __start__ --> explain_dataset;
-        check_hallucination --> __end__;
-        explain_dataset --> moderate_generation;
-        moderate_generation -.-> explain_dataset;
-        moderate_generation -.-> check_hallucination;
-        moderate_generation -.-> __end__;
-        classDef default fill:#f2f0ff,line-height:1.2
-        classDef first fill-opacity:0
-        classDef last fill:#bfb6fc
+```{python}
+#| fig-cap: "Generation graph"
+
+display(
+    Image(
+        generation_graph().get_graph().draw_mermaid_png(), width=150
+    )
+)
 ```
 
 1. **Start:** The user selects the 'Ask AI' option for a particular dataset.

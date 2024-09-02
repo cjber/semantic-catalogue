@@ -189,18 +189,8 @@ and **Ask AI**.
 
 **Search Process:**
 
-``` mermaid
-%%{init: {'flowchart': {'curve': 'linear'}}}%%
-graph TD;
-        __start__([__start__]):::first
-        retrieve(retrieve)
-        __end__([__end__]):::last
-        __start__ --> retrieve;
-        retrieve --> __end__;
-        classDef default fill:#f2f0ff,line-height:1.2
-        classDef first fill-opacity:0
-        classDef last fill:#bfb6fc
-```
+<img src="DOCS_files/figure-commonmark/cell-3-output-1.jpeg" width="70"
+alt="Search process graph" />
 
 1.  **Start:** The user initiates a search query through the interface.
 2.  **Retrieve:** The query is embedded using the LLM, and relevant
@@ -210,24 +200,8 @@ graph TD;
 
 **Ask AI Process:**
 
-``` mermaid
-%%{init: {'flowchart': {'curve': 'linear'}}}%%
-graph TD;
-        __start__([__start__]):::first
-        explain_dataset(explain_dataset)
-        moderate_generation(moderate_generation)
-        check_hallucination(check_hallucination)
-        __end__([__end__]):::last
-        __start__ --> explain_dataset;
-        check_hallucination --> __end__;
-        explain_dataset --> moderate_generation;
-        moderate_generation -.-> explain_dataset;
-        moderate_generation -.-> check_hallucination;
-        moderate_generation -.-> __end__;
-        classDef default fill:#f2f0ff,line-height:1.2
-        classDef first fill-opacity:0
-        classDef last fill:#bfb6fc
-```
+<img src="DOCS_files/figure-commonmark/cell-4-output-1.jpeg" width="150"
+alt="Generation graph" />
 
 1.  **Start:** The user selects the ‘Ask AI’ option for a particular
     dataset.
