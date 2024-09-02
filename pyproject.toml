@@ -42,6 +42,7 @@ dev-dependencies = [
     "ipython>=8.24.0",
     "pygraphviz>=1.13",
     "sourcery-cli>=1.18.0",
+    "jupyter>=1.1.1",
 ]
 
 [tool.hatch.metadata]
