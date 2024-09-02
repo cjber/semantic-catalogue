@@ -28,10 +28,11 @@ For each catalogue their respective API was used to return metadata for all data
 
 The descriptions of each dataset were then saved into individual text files, identifiable by a unique ID. These files were each embedded using [OpenAI embeddings](https://platform.openai.com/docs/guides/embeddings) (_text-embedding-3-large_), which convert the text into high-dimensional vectors that encapsulate the semantic meaning of the content. These embeddings, along with associated metadata, were uploaded to the [Pinecone](https://pinecone.io) vector database, where they are stored and indexed for fast retrieval.
 
-To optimise the accuracy of search results, dataset descriptions were 'chunked' into segments of 1024 tokens. Chunking ensures that specific, relevant parts of a document can be accurately matched with a user's query, increasing the likelihood of retrieving pertinent datasets. Additionally, chunking helps in dealing with large documents by breaking them down into more manageable and contextually relevant pieces.
+To optimise the accuracy of search results, dataset descriptions were 'chunked' into segments of 1024 tokens. Chunking ensures that specific, relevant parts of a document can be accurately matched with a user's query, increasing the likelihood of retrieving desirable datasets. Additionally, chunking helps in dealing with documents that may be too large to process in downstream tasks.
 
-To maintain the currency and relevance of the data within the Semantic Data Catalogue, the extraction, processing, and embedding pipeline is automated using the [Dagster](https://dagster.io) framework. This automation facilitates the regular updating of the database as new datasets are added to the source catalogues, ensuring that the system remains up-to-date and continues to provide accurate and comprehensive search results.
+To maintain the currency and relevance of the data within the Semantic Data Catalogue, the extraction, processing, and embedding pipeline is automated using the [Dagster](https://dagster.io) framework. This automation facilitates the regular updating of the database as new datasets are added to the source catalogues, ensuring that the system remains up-to-date and continues to provide accurate and comprehensive search results. Figure @fig-dagster gives an overview of the '_[assets](https://docs.dagster.io/concepts/assets/software-defined-assets)_' and their linkeage as they are automatically processed.
 
+![Dagster global asset lineage](./figs/dagster_light.png){#fig-dagster}
 
 ## Semantic Search and RAG Model
 

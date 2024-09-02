@@ -58,9 +58,9 @@ and indexed for fast retrieval.
 To optimise the accuracy of search results, dataset descriptions were
 ‘chunked’ into segments of 1024 tokens. Chunking ensures that specific,
 relevant parts of a document can be accurately matched with a user’s
-query, increasing the likelihood of retrieving pertinent datasets.
-Additionally, chunking helps in dealing with large documents by breaking
-them down into more manageable and contextually relevant pieces.
+query, increasing the likelihood of retrieving desirable datasets.
+Additionally, chunking helps in dealing with documents that may be too
+large to process in downstream tasks.
 
 To maintain the currency and relevance of the data within the Semantic
 Data Catalogue, the extraction, processing, and embedding pipeline is
@@ -68,7 +68,20 @@ automated using the [Dagster](https://dagster.io) framework. This
 automation facilitates the regular updating of the database as new
 datasets are added to the source catalogues, ensuring that the system
 remains up-to-date and continues to provide accurate and comprehensive
-search results.
+search results. Figure
+<a href="#fig-dagster" class="quarto-xref">Figure 1</a> gives an
+overview of the
+‘*[assets](https://docs.dagster.io/concepts/assets/software-defined-assets)*’
+and their linkeage as they are automatically processed.
+
+<div id="fig-dagster">
+
+![](./figs/dagster_light.png)
+
+
+Figure 1: Dagster global asset lineage
+
+</div>
 
 ## Semantic Search and RAG Model
 
@@ -164,7 +177,7 @@ query:
 
 ## Overview
 
-<a href="#fig-architecture" class="quarto-xref">Figure 1</a> gives a
+<a href="#fig-architecture" class="quarto-xref">Figure 2</a> gives a
 broad overview of the system architecture.
 
 <div id="fig-architecture">
@@ -172,7 +185,7 @@ broad overview of the system architecture.
 ![](./figs/system.png)
 
 
-Figure 1: System architecture
+Figure 2: System architecture
 
 </div>
 
