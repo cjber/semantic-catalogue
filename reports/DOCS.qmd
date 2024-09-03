@@ -80,6 +80,8 @@ In an effort to prevent user queries from returning inappropriate content from t
 
 > NOTE: For now we do not block queries, but block any sensitive content from appearing within the generated output of the 'Ask AI' button, using the OpenAI moderation endpoint.  This occurs infrequently, and is difficult to replicate.
 
+NOTE: add hallucinations and other examples
+
 # System architecture {#sec-architecture}
 
 ## Overview
