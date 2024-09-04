@@ -4,6 +4,10 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/cjber/semantic-catalogue)
 ![GitHub issues](https://img.shields.io/github/issues/cjber/semantic-catalogue)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/cjber/semantic-catalogue)
+![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
+![Docker](https://img.shields.io/badge/docker-available-blue)
+![Dagster](https://img.shields.io/badge/dagster-1.7.8-blue)
+![FastAPI](https://img.shields.io/badge/fastapi-0.112.0-blue)
 
 ## Overview
 
@@ -13,6 +17,8 @@ The Semantic Search Catalogue is a cutting-edge project designed to enhance the 
 
 - **Semantic Search:** Utilizes OpenAI embeddings stored on Pinecone, enabling semantic querying using cosine similarity for enhanced search accuracy.
 - **Retrieval Augmented Generation:** Leverages GPT 3.5 turbo to generate responses that explain the relevance of retrieved datasets, offering deeper insights.
+- **Automated Data Management:** Uses Dagster to automate the creation and management of the Pinecone vector database.
+- **Multi-source Integration:** Aggregates data from multiple sources including ADR, CDRC, and UKDS.
 
 ## System Architecture
 
@@ -93,3 +99,10 @@ Further information regarding the methods used can be found in [DOCS.md](./repor
 ## Contact
 
 For any inquiries, please contact the project maintainers at [contact@example.com](mailto:contact@example.com).
+
+## Acknowledgements
+
+- **OpenAI:** For providing the powerful language models.
+- **Pinecone:** For the vector database services.
+- **Dagster:** For the data orchestration framework.
+- **FastAPI:** For the web framework.
