@@ -1,25 +1,32 @@
-# Semantic Catalogue
+<div align="center">
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/cjber/semantic-catalogue)
-![GitHub last commit](https://img.shields.io/github/last-commit/cjber/semantic-catalogue)
-![GitHub issues](https://img.shields.io/github/issues/cjber/semantic-catalogue)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/cjber/semantic-catalogue)
-![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
-![Docker](https://img.shields.io/badge/docker-available-blue)
-![Dagster](https://img.shields.io/badge/dagster-1.7.8-blue)
-![FastAPI](https://img.shields.io/badge/fastapi-0.112.0-blue)
+![](./reports/figs/svg/logo-no-background.svg)
 
-## Overview
+![GitHub last commit](https://img.shields.io/github/last-commit/cjber/semantic-catalogue?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/cjber/semantic-catalogue?style=for-the-badge)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/cjber/semantic-catalogue?style=for-the-badge)
 
-The Semantic Search Catalogue is a cutting-edge project designed to enhance the search capabilities of data catalogues for research purposes. By moving beyond traditional keyword-based searches, it provides users with more accurate and relevant results through semantic understanding.
+![Python Version](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+![Dagster](https://img.shields.io/badge/Dagster-654FF0?style=for-the-badge&logo=Dagster&logoColor=white)
+![FastAPI](https://img.shields.io/badge/fastapi-109989?style=for-the-badge&logo=FASTAPI&logoColor=white)
+
+
+---
+**The _Semantic Catalogue_ is a project designed to enhance the search capabilities of data catalogues for research purposes. By moving beyond traditional keyword-based searches, it provides users with more accurate and relevant results through semantic understanding.**
+
+---
+
+
+</div>
+
 
 ## Features
 
-- **Semantic Search:** Utilizes OpenAI embeddings stored on Pinecone, enabling semantic querying using cosine similarity for enhanced search accuracy.
-- **Retrieval Augmented Generation:** Leverages GPT 3.5 turbo to generate responses that explain the relevance of retrieved datasets, offering deeper insights.
-- **Automated Data Management:** Uses Dagster to automate the creation and management of the Pinecone vector database.
-- **Multi-source Integration:** Aggregates data from multiple sources including ADR, CDRC, and UKDS.
+- **Semantic Search:** OpenAI embeddings stored on Pinecone enable semantic querying using cosine similarity for enhanced search discoverability.
+- **Retrieval Augmented Generation:** GPT 4o-turbo generates responses that explain the relevance of retrieved datasets, enabling transparency and insights.
 - **Moderation and Hallucination Detection:** Ensures the generated content is appropriate and grounded in facts.
+- **Automated Data Management:** Dagster automates the creation and continuous management of the Pinecone vector database.
 
 ## System Architecture
 
@@ -51,7 +58,7 @@ Ensure you have the following installed:
 - Docker or Podman
 - Git
 
-### Build Python Environment
+### Contribution Setup
 
 To contribute, please follow these steps:
 
@@ -79,13 +86,16 @@ To contribute, please follow these steps:
 
 ## Running the Project
 
-The project is fully containerized using `podman`/`docker` `compose`. To run the full system, execute:
+> [!WARNING]
+> This project is not intended for public use and requires access to a private database.
+
+The project is fully containerised using `podman`/`docker` `compose`. To run the full system, execute:
 
 ```bash
 podman compose up -d
 ```
 
-### Accessing the Semantic Catalogue Search
+### Accessing the Frontend
 
 Once up and running, access the semantic catalogue search at `http://localhost:8001`.
 
@@ -93,40 +103,3 @@ Once up and running, access the semantic catalogue search at `http://localhost:8
 
 The Dagster UI is available at `http://localhost:3000`. Adjust the Auto Materialize and Sensor settings to start the automation.
 
-> **WARNING:** This project is not intended for public use and requires access to a private database.
-
-## Contributing
-
-We welcome contributions! Please see our [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
-## Documentation
-
-Further information regarding the methods used can be found in [DOCS.md](./reports/DOCS.md).
-
-## Contact
-
-For any inquiries, please contact the project maintainers at [contact@example.com](mailto:contact@example.com).
-
-## Acknowledgements
-
-- **OpenAI:** For providing the powerful language models.
-- **Pinecone:** For the vector database services.
-- **Dagster:** For the data orchestration framework.
-- **FastAPI:** For the web framework.
-- **LangChain:** For the seamless integration of language models.
-- **Polars:** For efficient data manipulation.
-- **React:** For building the frontend interface.
-- **Material-UI:** For the UI components.
-- **Docker:** For containerization.
-- **PostgreSQL:** For the database management.
-- **Tenacity:** For retrying operations.
-- **TQDM:** For progress bars.
-- **Requests:** For making HTTP requests.
-- **Dateparser:** For parsing dates.
-- **PDFMiner:** For extracting text from PDFs.
-- **Pydantic:** For data validation.
-- **Sickle:** For harvesting metadata.
