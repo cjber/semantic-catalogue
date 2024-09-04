@@ -31,6 +31,16 @@ Dagster is utilized to automate the creation of the Pinecone vector database, en
 
 ![Global Asset Lineage](./reports/figs/Global_Asset_Lineage.svg)
 
+## Project Structure
+
+The project is organized into several key components:
+
+- **Backend (FastAPI):** Handles API requests and integrates with the data processing pipeline.
+- **Frontend (React):** Provides a user-friendly interface for interacting with the semantic search capabilities.
+- **Data Processing (Dagster):** Manages data ingestion, processing, and storage using a robust pipeline.
+- **Vector Database (Pinecone):** Stores embeddings for efficient semantic search.
+- **Machine Learning Models (OpenAI):** Powers the semantic understanding and generation capabilities.
+
 ## Getting Started
 
 ### Prerequisites
