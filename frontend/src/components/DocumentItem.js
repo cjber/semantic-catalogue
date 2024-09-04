@@ -60,8 +60,7 @@ function DocumentItem({ document, threadId }) {
                 },
               }}
             >
-              {document.metadata.title || "Untitled"}
-            </Typography>
+              {document.metadata.title || "Untitled"} - Score: {document.score}
           </Link>
         </Box>
         <IconButton onClick={handleToggleExpand} size="small">
