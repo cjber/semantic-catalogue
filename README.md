@@ -16,7 +16,7 @@
 
 ---
 
-[Methodology](./reports/DOCS.md) · [View Demo](https://apps.cdrc.ac.uk/semantic-catalogue)
+[Methodology](./reports/DOCS.md) · [View Demo](https://apps.cdrc.ac.uk/semantic-catalogue) · [Getting Started](https://github.com/cjber/semantic-catalogue?tab=readme-ov-file#getting-started)
 </div>
 
 
@@ -33,27 +33,27 @@ The Semantic Catalogue is an advanced system designed to enhance the search capa
 
 ## System Architecture
 
-The Semantic Catalogue employs a Retrieval Augmented Generation (RAG) architecture, which combines retrieval-based and generation-based models. This architecture involves two main steps:
+The Semantic Catalogue employs a Retrieval Augmented Generation (RAG) architecture, which combines retrieval-based and generation-based models. This involves two main steps:
+
 1. **Retrieval:** Relevant datasets are retrieved based on a user's query using semantic embeddings.
 2. **Generation:** The retrieved dataset descriptions are used to generate contextually relevant responses that explain their relevance to the query.
 
 ![System Architecture](./reports/figs/system.png)
-
-### Data Management with Dagster
-
-Dagster automates the data management processes, including data ingestion, transformation, and indexing. This ensures the Pinecone vector database is continuously updated and maintained, which is crucial for the accuracy and relevance of the semantic search capabilities.
-
-![Global Asset Lineage](./reports/figs/Global_Asset_Lineage.svg)
-
-## Project Structure
-
-The project is organized into several key components:
+*System Architecture*
 
 - **Backend (FastAPI):** Handles API requests and integrates with the data processing pipeline. It serves as the core interface for interacting with the semantic search system.
 - **Frontend (React):** Provides a user-friendly interface for users to interact with the semantic search capabilities. It allows users to input queries and view results in an intuitive manner.
 - **Data Processing (Dagster):** Manages the entire data lifecycle, from ingestion to processing and storage. Dagster's robust pipeline ensures data is handled efficiently and accurately.
 - **Vector Database (Pinecone):** Stores semantic embeddings for efficient search operations. Pinecone's vector database is optimized for handling high-dimensional data, making it ideal for semantic search tasks.
 - **Machine Learning Models (OpenAI):** Powers the semantic understanding and generation capabilities. OpenAI's models are used to interpret queries and generate relevant responses based on retrieved data.
+
+### Data Management with Dagster
+
+Dagster automates the data management processes, including data ingestion, transformation, and indexing. This ensures the Pinecone vector database is continuously updated and maintained, which is crucial for the accuracy and relevance of the semantic search capabilities.
+
+![Global Asset Lineage](./reports/figs/Global_Asset_Lineage.svg)
+*Global Asset Lineage*
+
 
 ## Detailed Functionality
 
