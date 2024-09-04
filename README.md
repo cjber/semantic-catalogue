@@ -30,11 +30,11 @@
 
 ## System Architecture
 
-The Semantic Catalogue employs a standard Retrieval Augmented Generation (RAG) architecture:
+The Semantic Catalogue employs a standard Retrieval Augmented Generation (RAG) architecture, which combines the strengths of retrieval-based and generation-based models. This architecture first retrieves relevant dataset descriptions based on a users query, then uses them to generate more accurate and contextually relevant responses to explain their relevance.
 
 ![System Architecture](./reports/figs/system.png)
 
-Dagster is utilized to automate the creation of the Pinecone vector database, ensuring efficient data management:
+Dagster is used to automate the creation and continuous management of the Pinecone vector database, ensuring efficient data management and seamless updates. This automation includes tasks such as data ingestion, transformation, and indexing, which are crucial for maintaining the accuracy and relevance of the semantic search capabilities:
 
 ![Global Asset Lineage](./reports/figs/Global_Asset_Lineage.svg)
 
