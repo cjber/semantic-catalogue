@@ -19,6 +19,7 @@ The Semantic Search Catalogue is a cutting-edge project designed to enhance the 
 - **Retrieval Augmented Generation:** Leverages GPT 3.5 turbo to generate responses that explain the relevance of retrieved datasets, offering deeper insights.
 - **Automated Data Management:** Uses Dagster to automate the creation and management of the Pinecone vector database.
 - **Multi-source Integration:** Aggregates data from multiple sources including ADR, CDRC, and UKDS.
+- **Moderation and Hallucination Detection:** Ensures the generated content is appropriate and grounded in facts.
 
 ## System Architecture
 
@@ -106,3 +107,16 @@ For any inquiries, please contact the project maintainers at [contact@example.co
 - **Pinecone:** For the vector database services.
 - **Dagster:** For the data orchestration framework.
 - **FastAPI:** For the web framework.
+- **LangChain:** For the seamless integration of language models.
+- **Polars:** For efficient data manipulation.
+- **React:** For building the frontend interface.
+- **Material-UI:** For the UI components.
+- **Docker:** For containerization.
+- **PostgreSQL:** For the database management.
+- **Tenacity:** For retrying operations.
+- **TQDM:** For progress bars.
+- **Requests:** For making HTTP requests.
+- **Dateparser:** For parsing dates.
+- **PDFMiner:** For extracting text from PDFs.
+- **Pydantic:** For data validation.
+- **Sickle:** For harvesting metadata.
