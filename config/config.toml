@@ -1,6 +1,6 @@
 [datastore]
 index_name = "data-catalogue"
-host = "https://data-catalogue-qjckkzu.svc.aped-4627-b74a.pinecone.io"
+host = "https://data-catalogue-afz2q2b.svc.aped-4627-b74a.pinecone.io"
 embed_model = "text-embedding-3-small"
 embed_dim = 1536
 chunk_size = 1024
