@@ -9,4 +9,5 @@ COPY dagster.yaml $DAGSTER_HOME
 WORKDIR /opt/dagster/app
 
 COPY requirements.lock pyproject.toml .env README.md ./
-RUN pip install --no-cache-dir -r requirements.lock
+COPY bm25 ./bm25
+RUN pip install --no-cache-dir -r requirements.lock && python3 -m nltk.downloader punkt_tab
