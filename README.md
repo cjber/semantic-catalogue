@@ -102,7 +102,7 @@ To contribute, please follow these steps:
 3. **Install dependencies:**
 
    ```bash
-   pip install -r requirements.lock
+   pip install . # (or uv sync)
    ```
 
 4. **Configure the system:**
