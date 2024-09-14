@@ -14,6 +14,7 @@ from src.common.settings import cfg
 from src.model.citations import answer_citations, format_docs_with_id
 from src.model.hallucination import hallucination_grader
 from src.model.moderation import moderate
+from src.model.rag import rag_chain
 
 _ = load_dotenv()
 
@@ -96,13 +97,13 @@ def explain_dataset(state):
     chunks = text_splitter.split_documents([document])
     docs = format_docs_with_id(chunks)
 
-    generation = answer_citations.invoke({"query": query, "context": docs})
+    generation = rag_chain.invoke({"query": query, "context": docs})
 
     return {
         "query": query,
         "document": document,
-        "chunks": [c.dict() for c in chunks],
-    } | generation
+        # "chunks": [c.dict() for c in chunks],
+    } | {"generation": generation}
 
 
 def moderate_generation(state):
