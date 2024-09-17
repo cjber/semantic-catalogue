@@ -26,7 +26,7 @@ The Semantic Catalogue is an advanced system designed to enhance the search capa
 
 ## Features
 
-- **Semantic Search:** Utilizes OpenAI embeddings stored in Pinecone to perform semantic queries, enhancing search discoverability through cosine similarity.
+- **Semantic Search:** Utilises OpenAI embeddings stored in Pinecone to perform semantic queries, enhancing search discoverability through cosine similarity.
 - **Retrieval Augmented Generation (RAG):** Employs GPT 4o-turbo to generate responses that explain the relevance of retrieved datasets, providing transparency and insights.
 - **Moderation and Hallucination Detection:** Ensures generated content is appropriate and factually grounded, using moderation and hallucination detection mechanisms.
 - **Automated Data Management:** Leverages Dagster to automate the creation and continuous management of the Pinecone vector database, ensuring efficient data handling and updates.
@@ -44,7 +44,7 @@ The Semantic Catalogue employs a Retrieval Augmented Generation (RAG) architectu
 - **Backend (FastAPI):** Handles API requests and integrates with the data processing pipeline. It serves as the core interface for interacting with the semantic search system.
 - **Frontend (React):** Provides a user-friendly interface for users to interact with the semantic search capabilities. It allows users to input queries and view results in an intuitive manner.
 - **Data Processing (Dagster):** Manages the entire data lifecycle, from ingestion to processing and storage. Dagster's robust pipeline ensures data is handled efficiently and accurately.
-- **Vector Database (Pinecone):** Stores semantic embeddings for efficient search operations. Pinecone's vector database is optimized for handling high-dimensional data, making it ideal for semantic search tasks.
+- **Vector Database (Pinecone):** Stores semantic embeddings for efficient search operations. Pinecone's vector database is optimised for handling high-dimensional data, making it ideal for semantic search tasks.
 - **Machine Learning Models (OpenAI):** Powers the semantic understanding and generation capabilities. OpenAI's models are used to interpret queries and generate relevant responses based on retrieved data.
 
 ### Data Management with Dagster
@@ -107,7 +107,7 @@ To contribute, please follow these steps:
 
 4. **Configure the system:**
 
-   Edit the `config/config.toml` file to customize model settings.
+   Edit the `config/config.toml` file to customise model settings.
 
 ## Running the Project
 
@@ -126,4 +126,4 @@ Once up and running, access the semantic catalogue search at `http://localhost:8
 
 ### Running the Dagster Pipeline
 
-The Dagster UI is available at `http://localhost:3000`. Adjust the Auto Materialize and Sensor settings to start the automation.
+The Dagster UI is available at `http://localhost:3000`. Adjust the Auto Materialise and Sensor settings to start the automation.
