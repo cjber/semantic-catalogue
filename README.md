@@ -2,14 +2,12 @@
 
 ![](./reports/figs/svg/logo-no-background.svg)
 
-![GitHub last commit](https://img.shields.io/github/last-commit/cjber/semantic-catalogue?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/cjber/semantic-catalogue?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/cjber/semantic-catalogue?style=for-the-badge)
-
 ![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
 ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
 ![Dagster](https://img.shields.io/badge/Dagster-654FF0?style=for-the-badge&logo=Dagster&logoColor=white)
-![FastAPI](https://img.shields.io/badge/fastapi-109989?style=for-the-badge&logo=FASTAPI&logoColor=white)
+![FastAPI](https://img.shields.io/badge/fastapi-109989?style=for-the-badge&logo=FASTAPI&logoColor=white)  
+![ChatGPT](https://img.shields.io/badge/ChatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
+![LangChain](https://img.shields.io/badge/langchain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 
 ---
 **The _Semantic Catalogue_ is a project designed to enhance the search capabilities of data catalogues for research purposes. By moving beyond traditional keyword-based searches, it provides users with more accurate and relevant results through semantic understanding.**
