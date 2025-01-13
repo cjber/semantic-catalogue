@@ -49,5 +49,4 @@ dev-dependencies = [
     "ipython>=8.27.0",
     "jupyter>=1.1.1",
     "ipdb>=0.13.13",
-    "pygraphviz>=1.13",
 ]
