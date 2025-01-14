@@ -1,17 +1,12 @@
 from typing import List
 
-from dotenv import load_dotenv
 from langchain_core.documents import Document
+from langchain_core.output_parsers.openai_tools import JsonOutputKeyToolsParser
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
-from langchain_openai import ChatOpenAI
 
-from src.common.settings import cfg
-from langchain_core.output_parsers.openai_tools import JsonOutputKeyToolsParser
+from src.model.llms.llm import LLM
 
-load_dotenv()
-
-llm = ChatOpenAI(model=cfg.model.llm, temperature=0)
 human = """
 Objective: Given a user's query and the returned dataset, your task is to summarise the relevance of this dataset to the query. Use the provided dataset snippets to construct a concise summary of no more than three sentences.
 
@@ -44,15 +39,13 @@ class CitedAnswer(BaseModel):
     )
 
 
-def format_docs_with_id(docs: List[Document]) -> str:
-    formatted = [
-        f"Source ID: {i}\nArticle Title: {doc.metadata['title']}\nArticle Snippet: {doc.page_content}"
-        for i, doc in enumerate(docs)
-    ]
-    return "\n\n" + "\n\n".join(formatted)
 
 
-llm_with_tool = llm.bind_tools([CitedAnswer], tool_choice="CitedAnswer")
+TLLM = LLM.bind_tools([CitedAnswer], tool_choice="CitedAnswer")
 
 output_parser = JsonOutputKeyToolsParser(key_name="CitedAnswer", first_tool_only=True)
-answer_citations = prompt | llm_with_tool | output_parser
+citation_chain = prompt | TLLM | output_parser
+
+if __name__ == "__main__":
+
+    citation

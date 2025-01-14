@@ -1,11 +1,8 @@
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
-from langchain_openai import ChatOpenAI
 
-from src.common.settings import cfg
-
-_ = load_dotenv()
+from src.model.llms.llm import LLM
 
 
 class GradeDocuments(BaseModel):
@@ -16,8 +13,7 @@ class GradeDocuments(BaseModel):
     )
 
 
-llm = ChatOpenAI(model=cfg.model.llm, temperature=0)
-structured_llm_grader = llm.with_structured_output(GradeDocuments)
+SLLM = LLM.with_structured_output(GradeDocuments)
 system = """
 You are a grader assessing relevance of a retrieved document to a user query. \n 
 It does not need to be a stringent test. The goal is to filter out erroneous retrievals. \n
@@ -31,4 +27,11 @@ grade_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-retrieval_grader = grade_prompt | structured_llm_grader
+grader_chain = grade_prompt | SLLM
+
+if __name__ == "__main__":
+    test_document = "Water is wet."
+    test_query = "Where is the moon?"
+
+    test_out = grader_chain.invoke({"document": test_document, "query": test_query})
+    print(test_out)

@@ -2,6 +2,7 @@ import re
 from pathlib import Path
 
 from dotenv import load_dotenv
+from langchain_core.documents import Document
 
 load_dotenv()
 
@@ -42,3 +43,11 @@ def clean_string(text: str) -> str:
     text = text.replace(" <PARAGRAPH_BREAK> ", "\n\n")
     text = text.strip()
     return text
+
+
+def format_docs_with_id(docs: list[Document]) -> str:
+    formatted = [
+        f"Source ID: {i}\nArticle Title: {doc.metadata['title']}\nArticle Snippet: {doc.page_content}"
+        for i, doc in enumerate(docs)
+    ]
+    return "\n\n" + "\n\n".join(formatted)

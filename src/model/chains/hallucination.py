@@ -1,10 +1,9 @@
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
-from pydantic import BaseModel, Field
 from langchain_openai import ChatOpenAI
+from pydantic import BaseModel, Field
 
 from src.common.settings import cfg
-from src.model.grader import structured_llm_grader
 
 _ = load_dotenv()
 
@@ -18,10 +17,11 @@ class GradeHallucinations(BaseModel):
 
 
 llm = ChatOpenAI(model=cfg.model.llm, temperature=0)
-structured_llm_grader = llm.with_structured_output(GradeHallucinations)
+hallucination_grader = llm.with_structured_output(GradeHallucinations)
 
 system = """
-You are a grader assessing whether an LLM generation is grounded in / supported by a set of retrieved facts. \n 
+You are a grader assessing whether an LLM generation is grounded in / supported by a set of retrieved facts.
+
 Give a binary score 'yes' or 'no'. 'yes' means that the answer is grounded in / supported by the set of facts.
 """
 hallucination_prompt = ChatPromptTemplate.from_messages(
@@ -31,4 +31,13 @@ hallucination_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-hallucination_grader = hallucination_prompt | structured_llm_grader
+hallucination_grader_chain = hallucination_prompt | hallucination_grader
+
+if __name__ == "__main__":
+    test_document = "Water is wet."
+    test_generation = "Water is dry."
+
+    test_out = hallucination_grader_chain.invoke(
+        {"document": test_document, "generation": test_generation}
+    )
+    print(test_out)
