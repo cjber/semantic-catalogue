@@ -40,10 +40,10 @@ build-backend = "hatchling.build"
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/semantic_catalogue"]
+packages = ["semantic_catalogue"]
 
 [tool.dagster]
-module_name = "src.datastore"
+module_name = "semantic_catalogue.datastore"
 
 [tool.uv]
 dev-dependencies = [
@@ -51,3 +51,6 @@ dev-dependencies = [
     "jupyter>=1.1.1",
     "ipdb>=0.13.13",
 ]
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"

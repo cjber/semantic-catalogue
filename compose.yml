@@ -27,14 +27,14 @@ services:
       - -p
       - "4000"
       - -m
-      - src.datastore
+      - semantic_catalogue.datastore
     environment:
       DAGSTER_POSTGRES_USER: "postgres_user"
       DAGSTER_POSTGRES_PASSWORD: "postgres_password"
       DAGSTER_POSTGRES_DB: "postgres_db"
       DAGSTER_CURRENT_IMAGE: "datastore"
     volumes:
-      - ./src:/opt/dagster/app/src
+      - ./semantic_catalogue:/opt/dagster/app/semantic_catalogue
       - ./config:/opt/dagster/app/config
       - ./data:/opt/dagster/app/data
     networks:
@@ -62,7 +62,7 @@ services:
       DAGSTER_POSTGRES_PASSWORD: "postgres_password"
       DAGSTER_POSTGRES_DB: "postgres_db"
     volumes:
-      - ./src:/opt/dagster/app/src
+      - ./semantic_catalogue:/opt/dagster/app/semantic_catalogue
       - ./config:/opt/dagster/app/config
       - ./data:/opt/dagster/app/data
     networks:
@@ -84,7 +84,7 @@ services:
       DAGSTER_POSTGRES_PASSWORD: "postgres_password"
       DAGSTER_POSTGRES_DB: "postgres_db"
     volumes:
-      - ./src:/opt/dagster/app/src
+      - ./semantic_catalogue:/opt/dagster/app/semantic_catalogue
       - ./config:/opt/dagster/app/config
       - ./data:/opt/dagster/app/data
     networks:
