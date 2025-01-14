@@ -1,5 +1,6 @@
 data/
 notes/
+frontend/
 
 # python generated files
 __pycache__/
