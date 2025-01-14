@@ -25,8 +25,12 @@ def _group_by_document(documents):
 
 def search(state, retriever):
     logger.info("Starting retrieval process...")
+    logger.info("Starting retrieval process...")
     query = state["query"]
+    logger.debug(f"Query for retrieval: {query}")
 
     documents = retriever.invoke(query)
+    logger.debug(f"Retrieved {len(documents)} documents")
     documents = _group_by_document(documents)
+    logger.debug(f"Grouped documents into {len(documents)} groups")
     return {"documents": documents, "query": query}

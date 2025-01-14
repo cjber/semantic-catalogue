@@ -21,10 +21,14 @@ def explain_dataset(state):
     query = state["query"]
     document = state["document"]
 
+    logger.debug(f"Splitting document into chunks for query: {query}")
     chunks = text_splitter.split_documents([document])
+    logger.debug(f"Document split into {len(chunks)} chunks")
     # docs = format_docs_with_id(chunks)
 
+    logger.debug("Invoking RAG chain for generation")
     generation = rag_chain.invoke({"query": query, "context": document.page_content})
+    logger.debug(f"Generation result: {generation}")
 
     return {
         "query": query,
@@ -37,7 +41,9 @@ def moderate_generation(state):
     logger.info("Starting moderation...")
     generation = state["generation"]
 
+    logger.debug("Invoking moderation chain")
     moderation = moderate.invoke(generation)
+    logger.debug(f"Moderation result: {moderation}")
     if moderation["output"] != generation:
         logger.warning("Inappropriate content found in generation")
         state["generation"] = "Inappropriate content found in generation."
@@ -53,9 +59,11 @@ def check_hallucination(state):
     document = state["document"]
     generation = state["generation"]
 
+    logger.debug("Invoking hallucination grader chain")
     score = hallucination_grader_chain.invoke(
         {"document": document, "generation": generation}
     )
+    logger.debug(f"Hallucination grading result: {score.binary_score}")
     if score.binary_score == "yes":
         logger.info("No hallucination found in generation")
         state["generation"] = generation

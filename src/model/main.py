@@ -3,21 +3,25 @@ from src.model.logging import logger
 
 
 def search(query, thread_id):
+    logger.debug(f"Starting search with query: {query} and thread_id: {thread_id}")
     search = search_graph()
     output = search.invoke(
         {"query": query}, config={"configurable": {"thread_id": thread_id}}
     )
-    logger.info("Search done")
+    logger.info("Search completed successfully")
+    logger.debug(f"Search output: {output}")
     return output
 
 
 def generate(query, document, thread_id):
+    logger.debug(f"Starting generation with query: {query}, document: {document}, and thread_id: {thread_id}")
     gen = generation_graph()
     output = gen.invoke(
         {"query": query, "document": document},
         config={"configurable": {"thread_id": thread_id}},
     )
-    logger.info("Generation done")
+    logger.info("Generation completed successfully")
+    logger.debug(f"Generation output: {output}")
     return output
 
 

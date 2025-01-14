@@ -12,7 +12,9 @@ from src.model.states import GenerationState, SearchState
 
 
 def search_graph():
+    logger.info("Initializing search graph")
     retriever = dataset_retriever()
+    logger.debug("Dataset retriever initialized")
 
     workflow = StateGraph(SearchState)
     workflow.add_node("search", lambda state: search(state, retriever))
@@ -26,6 +28,7 @@ def search_graph():
 
 
 def generation_graph():
+    logger.info("Initializing generation graph")
     workflow = StateGraph(GenerationState)
     workflow.add_node("explain_dataset", explain_dataset)
     workflow.add_node("moderate_generation", moderate_generation)
