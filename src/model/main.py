@@ -1,4 +1,4 @@
-import logging
+from src.model.logging import logger
 
 from dotenv import load_dotenv
 
@@ -7,9 +7,6 @@ from src.model.graph import generation_graph, search_graph
 _ = load_dotenv()
 
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
 
 
 def search(query, thread_id):
@@ -17,7 +14,7 @@ def search(query, thread_id):
     output = search.invoke(
         {"query": query}, config={"configurable": {"thread_id": thread_id}}
     )
-    logging.info("Search done")
+    logger.info("Search done")
     return output
 
 
@@ -27,7 +24,7 @@ def generate(query, document, thread_id):
         {"query": query, "document": document},
         config={"configurable": {"thread_id": thread_id}},
     )
-    logging.info("Generation done")
+    logger.info("Generation done")
     return output
 
 

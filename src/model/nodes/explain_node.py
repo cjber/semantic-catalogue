@@ -1,4 +1,4 @@
-import logging
+from src.model.logging import logger
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langgraph.graph import END
@@ -17,7 +17,7 @@ text_splitter = RecursiveCharacterTextSplitter(
 
 def explain_dataset(state):
     # TODO: Might use chunks for citations
-    logging.info("Starting explain generation...")
+    logger.info("Starting explain generation...")
     query = state["query"]
     document = state["document"]
 
@@ -34,22 +34,22 @@ def explain_dataset(state):
 
 
 def moderate_generation(state):
-    logging.info("Starting moderation...")
+    logger.info("Starting moderation...")
     generation = state["generation"]
 
     moderation = moderate.invoke(generation)
     if moderation["output"] != generation:
-        logging.warning("Inappropriate content found in generation")
+        logger.warning("Inappropriate content found in generation")
         state["generation"] = "Inappropriate content found in generation."
         state["inappropriate"] = generation
     else:
-        logging.info("Generation content is appropriate")
+        logger.info("Generation content is appropriate")
 
     return state
 
 
 def check_hallucination(state):
-    logging.info("Starting hallucination check process...")
+    logger.info("Starting hallucination check process...")
     document = state["document"]
     generation = state["generation"]
 
@@ -57,10 +57,10 @@ def check_hallucination(state):
         {"document": document, "generation": generation}
     )
     if score.binary_score == "yes":
-        logging.info("No hallucination found in generation")
+        logger.info("No hallucination found in generation")
         state["generation"] = generation
     else:
-        logging.warning("Hallucination found in generation")
+        logger.warning("Hallucination found in generation")
         state["generation"] = f"**Hallucination found in generation.**\n\n{generation}"
     return state
 
@@ -68,5 +68,5 @@ def check_hallucination(state):
 def skip_hallucination(state):
     if state["generation"] != "Inappropriate content found in generation.":
         return "check_hallucination"
-    logging.warning("Inappropriate content found in generation")
+    logger.warning("Inappropriate content found in generation")
     return END
