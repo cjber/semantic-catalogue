@@ -1,5 +1,7 @@
 import pytest
+
 from src.model.main import search
+
 
 def test_search():
     query = "test query"
