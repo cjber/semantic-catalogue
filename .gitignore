@@ -1,6 +1,7 @@
 data/
 notes/
 frontend/
+logs/
 
 # python generated files
 __pycache__/
