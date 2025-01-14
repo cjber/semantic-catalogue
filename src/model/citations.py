@@ -1,13 +1,13 @@
 from typing import List
 
 from dotenv import load_dotenv
-from langchain.output_parsers.openai_tools import JsonOutputKeyToolsParser
 from langchain_core.documents import Document
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_openai import ChatOpenAI
 
 from src.common.settings import cfg
+from langchain_core.output_parsers.openai_tools import JsonOutputKeyToolsParser
 
 load_dotenv()
 
