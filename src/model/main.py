@@ -1,12 +1,5 @@
-from src.model.logging import logger
-
-from dotenv import load_dotenv
-
 from src.model.graph import generation_graph, search_graph
-
-_ = load_dotenv()
-
-
+from src.model.logging import logger
 
 
 def search(query, thread_id):
