@@ -1,5 +1,3 @@
-from src.model.logging import logger
-
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langgraph.graph import END
 
@@ -7,6 +5,7 @@ from src.common.utils import format_docs_with_id
 from src.model.chains.hallucination import hallucination_grader_chain
 from src.model.chains.moderation import moderate
 from src.model.chains.rag import rag_chain
+from src.model.logging import logger
 
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=512,
@@ -21,14 +20,14 @@ def explain_dataset(state):
     query = state["query"]
     document = state["document"]
 
-    logger.debug(f"Splitting document into chunks for query: {query}")
-    chunks = text_splitter.split_documents([document])
-    logger.debug(f"Document split into {len(chunks)} chunks")
+    # logger.debug(f"Splitting document into chunks for query: {query}")
+    # chunks = text_splitter.split_documents([document])
+    # logger.debug(f"Document split into {len(chunks)} chunks")
     # docs = format_docs_with_id(chunks)
 
     logger.debug("Invoking RAG chain for generation")
     generation = rag_chain.invoke({"query": query, "context": document.page_content})
-    logger.debug(f"Generation result: {generation}")
+    logger.debug(f"Generation result length: {len(generation)}")
 
     return {
         "query": query,
@@ -43,11 +42,12 @@ def moderate_generation(state):
 
     logger.debug("Invoking moderation chain")
     moderation = moderate.invoke(generation)
-    logger.debug(f"Moderation result: {moderation}")
+    logger.debug(f"Moderation result length: {len(moderation['output'])}")
     if moderation["output"] != generation:
         logger.warning("Inappropriate content found in generation")
-        state["generation"] = "Inappropriate content found in generation."
-        state["inappropriate"] = generation
+        state["generation"] = (
+            f"**Inappropriate content found in generation.**\n{generation}"
+        )
     else:
         logger.info("Generation content is appropriate")
 

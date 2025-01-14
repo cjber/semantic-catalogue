@@ -1,6 +1,6 @@
-from src.model.logging import logger
-
 from langchain_core.documents import Document
+
+from src.model.logging import logger
 
 
 def _group_by_document(documents):
@@ -24,7 +24,6 @@ def _group_by_document(documents):
 
 
 def search(state, retriever):
-    logger.info("Starting retrieval process...")
     logger.info("Starting retrieval process...")
     query = state["query"]
     logger.debug(f"Query for retrieval: {query}")

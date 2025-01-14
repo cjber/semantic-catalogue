@@ -9,19 +9,21 @@ def search(query, thread_id):
         {"query": query}, config={"configurable": {"thread_id": thread_id}}
     )
     logger.info("Search completed successfully")
-    logger.debug(f"Search output: {output}")
+    logger.debug(f"Number of documents returned: {len(output['documents'])}")
     return output
 
 
 def generate(query, document, thread_id):
-    logger.debug(f"Starting generation with query: {query}, document: {document}, and thread_id: {thread_id}")
+    logger.debug(
+        f"Starting generation with query: {query}, document_id: {document.metadata['id']}, and thread_id: {thread_id}"
+    )
     gen = generation_graph()
     output = gen.invoke(
         {"query": query, "document": document},
         config={"configurable": {"thread_id": thread_id}},
     )
     logger.info("Generation completed successfully")
-    logger.debug(f"Generation output: {output}")
+    logger.debug(f"Generation output length: {len(output['generation'])}")
     return output
 
 
