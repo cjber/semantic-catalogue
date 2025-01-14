@@ -1,6 +1,6 @@
 from langgraph.graph import END, START, StateGraph
 
-from src.model.logging import logger
+from semantic_catalogue.model.logging import logger
 from src.model.nodes.explain_node import (
     check_hallucination,
     explain_dataset,

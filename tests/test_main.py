@@ -1,6 +1,6 @@
 import pytest
 
-from src.model.main import search
+from semantic_catalogue.model.main import search
 
 
 def test_search():

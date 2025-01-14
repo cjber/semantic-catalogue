@@ -1,5 +1,5 @@
-from src.model.graph import generation_graph, search_graph
-from src.model.logging import logger
+from semantic_catalogue.model.graph import generation_graph, search_graph
+from semantic_catalogue.model.logging import logger
 
 
 def search(query, thread_id):

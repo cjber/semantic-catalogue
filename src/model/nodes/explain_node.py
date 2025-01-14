@@ -1,11 +1,11 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langgraph.graph import END
 
-from src.common.utils import format_docs_with_id
-from src.model.chains.hallucination import hallucination_grader_chain
-from src.model.chains.moderation import moderate
-from src.model.chains.rag import rag_chain
-from src.model.logging import logger
+from semantic_catalogue.common.utils import format_docs_with_id
+from semantic_catalogue.model.chains.hallucination import hallucination_grader_chain
+from semantic_catalogue.model.chains.moderation import moderate
+from semantic_catalogue.model.chains.rag import rag_chain
+from semantic_catalogue.model.logging import logger
 
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=512,

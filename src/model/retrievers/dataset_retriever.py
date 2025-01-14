@@ -3,7 +3,7 @@ from langchain_openai import OpenAIEmbeddings
 from pinecone import Pinecone
 from pinecone_text.sparse import BM25Encoder
 
-from src.common.settings import cfg
+from semantic_catalogue.common.settings import cfg
 
 
 def dataset_retriever():
