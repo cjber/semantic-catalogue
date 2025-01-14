@@ -1,5 +1,3 @@
-import pytest
-
 from semantic_catalogue.model.main import search
 
 
