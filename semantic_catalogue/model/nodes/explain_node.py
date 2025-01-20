@@ -1,39 +1,21 @@
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langgraph.graph import END
 
-from semantic_catalogue.common.utils import format_docs_with_id
 from semantic_catalogue.model.chains.hallucination import hallucination_grader_chain
 from semantic_catalogue.model.chains.moderation import moderate
 from semantic_catalogue.model.chains.rag import rag_chain
 from semantic_catalogue.model.logging import logger
 
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=512,
-    separators=["\n\n", "\n", ". "],
-    keep_separator=False,
-)
-
 
 def explain_dataset(state):
-    # TODO: Might use chunks for citations
     logger.info("Starting explain generation...")
     query = state["query"]
     document = state["document"]
-
-    # logger.debug(f"Splitting document into chunks for query: {query}")
-    # chunks = text_splitter.split_documents([document])
-    # logger.debug(f"Document split into {len(chunks)} chunks")
-    # docs = format_docs_with_id(chunks)
 
     logger.debug("Invoking RAG chain for generation")
     generation = rag_chain.invoke({"query": query, "context": document.page_content})
     logger.debug(f"Generation result length: {len(generation)}")
 
-    return {
-        "query": query,
-        "document": document,
-        # "chunks": [c.dict() for c in chunks], # TODO: Might use this for citations
-    } | {"generation": generation}
+    return {**state, "generation": generation}
 
 
 def moderate_generation(state):
