@@ -1,5 +1,4 @@
 from semantic_catalogue.model.chains.citations import citation_chain
-from langchain_core.documents import Document
 
 
 def test_citation_chain():
