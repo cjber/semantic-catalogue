@@ -19,12 +19,9 @@ def search_graph():
 
     workflow = StateGraph(SearchState)
     workflow.add_node("search", lambda state: search(state, retriever))
-    # workflow.add_node("compress", lambda state: compress(state, retriever))
 
     workflow.add_edge(START, "search")
     workflow.add_edge("search", END)
-    # workflow.add_edge("retrieve", "compress")
-    # workflow.add_edge("compress", END)
     return workflow.compile()
 
 
