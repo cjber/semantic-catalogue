@@ -1,10 +1,7 @@
-from dotenv import load_dotenv
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 
 from semantic_catalogue.model.llms.llm import LLM
-
-_ = load_dotenv()
 
 human = """
 A user has queried a data catalogue, which has returned a relevant dataset.

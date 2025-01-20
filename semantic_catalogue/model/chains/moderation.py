@@ -1,8 +1,4 @@
-from dotenv import load_dotenv
 from langchain.chains import OpenAIModerationChain
-
-_ = load_dotenv()
-
 
 moderate = OpenAIModerationChain()
 

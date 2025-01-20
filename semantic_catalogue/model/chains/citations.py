@@ -1,6 +1,5 @@
 from typing import List
 
-from langchain_core.documents import Document
 from langchain_core.output_parsers.openai_tools import JsonOutputKeyToolsParser
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
@@ -37,8 +36,6 @@ class CitedAnswer(BaseModel):
         ...,
         description="The integer IDs of the SPECIFIC sources which justify the summary.",
     )
-
-
 
 
 TLLM = LLM.bind_tools([CitedAnswer], tool_choice="CitedAnswer")
