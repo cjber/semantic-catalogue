@@ -42,3 +42,13 @@ def generation_graph():
     workflow.add_conditional_edges("moderate_generation", skip_hallucination)
     workflow.add_conditional_edges("check_hallucination", should_regenerate)
     return workflow.compile()
+
+
+def plot_graph():
+    search = search_graph()
+    search.get_graph().draw_mermaid_png(
+        output_file_path="./reports/figs/search_graph.png"
+    )
+
+    generation = generation_graph()
+    generation.get_graph().draw_mermaid_png(output_file_path="./reports/figs/gen_graph.png")
