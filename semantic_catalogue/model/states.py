@@ -12,6 +12,6 @@ class GenerationState(TypedDict):
     generation: str
     explanation: str
     iteration: int
-    chunks: list[dict]
+    cited_chunks: list[dict]
 
     is_hallucination: str
