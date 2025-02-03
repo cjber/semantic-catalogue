@@ -1,3 +1,4 @@
+import numpy as np
 from langchain_core.documents import Document
 
 from semantic_catalogue.model.logging import logger
@@ -29,7 +30,14 @@ def search(state, retriever):
     logger.debug(f"Query for retrieval: {query}")
 
     documents = retriever.invoke(query)
+
     logger.debug(f"Retrieved {len(documents)} documents")
     documents = _group_by_document(documents)
+    scores = [doc.metadata["score"] for doc in documents]
+    quintiles = np.percentile(scores, [0, 20, 40, 60, 80, 100])
+    quintile_labels = np.digitize(scores, quintiles) - 1
+
+    for doc, score_quintile in zip(documents, quintile_labels):
+        doc.metadata["score_quintile"] = score_quintile
     logger.debug(f"Grouped documents into {len(documents)} groups")
     return {"documents": documents, "query": query}
