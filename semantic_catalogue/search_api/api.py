@@ -4,7 +4,6 @@ from uuid import UUID, uuid4
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from langchain_core.documents import Document
-
 from src.model.model import generate, search
 
 app = FastAPI()
