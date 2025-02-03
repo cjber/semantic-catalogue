@@ -38,11 +38,10 @@ class CitedAnswer(BaseModel):
     )
 
 
-TLLM = LLM.bind_tools([CitedAnswer], tool_choice="CitedAnswer")
+SLLM = LLM.with_structured_output(CitedAnswer)
 
-output_parser = JsonOutputKeyToolsParser(key_name="CitedAnswer", first_tool_only=True)
-citation_chain = prompt | TLLM | output_parser
+citation_chain = prompt | SLLM
 
 if __name__ == "__main__":
-
-    citation
+    test_query = "healthy food"
+    test_docs = ["AHAH Index provides information regarding fast food locations.", ""]
