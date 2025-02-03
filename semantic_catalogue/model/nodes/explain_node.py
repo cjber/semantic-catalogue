@@ -1,14 +1,22 @@
 from typing import Literal
 
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langgraph.graph import END
 
+from semantic_catalogue.common.settings import cfg
+from semantic_catalogue.common.utils import format_docs_with_id
+from semantic_catalogue.model.chains.citations import citation_chain
 from semantic_catalogue.model.chains.fix import fix_chain
 from semantic_catalogue.model.chains.hallucination import hallucination_grader_chain
 from semantic_catalogue.model.chains.moderation import moderate
-from semantic_catalogue.model.chains.rag import rag_chain
 from semantic_catalogue.model.logging import logger
 
-MAX_ITERATIONS = 3
+chunk_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=256,
+    chunk_overlap=0,
+    separators=["\n\n", "\n", ". "],
+    keep_separator=False,
+)
 
 
 def explain_dataset(state):
@@ -16,11 +24,25 @@ def explain_dataset(state):
     query = state["query"]
     document = state["document"]
 
-    logger.debug("Invoking RAG chain for generation")
-    generation = rag_chain.invoke({"query": query, "context": document.page_content})
-    logger.debug(f"Generation result length: {len(generation)}")
+    logger.debug("Splitting document into chunks for citations")
+    # splitting into chunks ensures the model can choose specific parts to cite inline
+    chunks = chunk_splitter.split_documents([document])
+    doc_chunks = format_docs_with_id(chunks)
+    logger.debug("Invoking citation chain to generate response")
+    out = citation_chain.invoke({"query": query, "context": doc_chunks})
+    logger.debug(f"Generation result length: {len(out.generation)}")
 
-    return {**state, "generation": generation, "iteration": 0}
+    cited_chunks = [
+        chunk.model_dump() for id, chunk in enumerate(chunks) if id in out.citations
+    ]
+    logger.debug(f"{len(cited_chunks)} chunks used in citation: {out.citations}")
+
+    return {
+        **state,
+        "generation": out.generation,
+        "iteration": 0,
+        "cited_chunks": cited_chunks,
+    }
 
 
 def moderate_generation(state):
@@ -55,7 +77,7 @@ def check_hallucination(state):
 
 def should_regenerate(state) -> Literal["fix_hallucination", END]:
     logger.info("Checking if the explanation should be regenerated.")
-    if not state["is_hallucination"] or state["iteration"] > MAX_ITERATIONS:
+    if not state["is_hallucination"] or state["iteration"] > cfg.model.max_iterations:
         return END
     logger.info("Hallucination found, regenerating.")
     return "fix_hallucination"
