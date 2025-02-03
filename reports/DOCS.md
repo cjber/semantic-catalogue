@@ -78,7 +78,6 @@ and their linkeage as they are automatically processed.
 
 ![](./figs/dagster_light.png)
 
-
 Figure 1: Dagster global asset lineage
 
 </div>
@@ -173,6 +172,8 @@ query:
 > using the OpenAI moderation endpoint. This occurs infrequently, and is
 > difficult to replicate.
 
+NOTE: add hallucinations and other examples
+
 # System architecture
 
 ## Overview
@@ -183,7 +184,6 @@ broad overview of the system architecture.
 <div id="fig-architecture">
 
 ![](./figs/system.png)
-
 
 Figure 2: System architecture
 
@@ -202,7 +202,10 @@ and **Ask AI**.
 
 **Search Process:**
 
-<img src="DOCS_files/figure-commonmark/cell-3-output-1.jpeg" width="70"
+    2025-02-03 16:36:25.654 | INFO     | semantic_catalogue.model.graph:search_graph:18 - Initializing search graph
+    2025-02-03 16:36:25.714 | DEBUG    | semantic_catalogue.model.graph:search_graph:20 - Dataset retriever initialized
+
+<img src="DOCS_files/figure-commonmark/cell-3-output-2.png" width="70"
 alt="Search process graph" />
 
 1.  **Start:** The user initiates a search query through the interface.
@@ -213,7 +216,9 @@ alt="Search process graph" />
 
 **Ask AI Process:**
 
-<img src="DOCS_files/figure-commonmark/cell-4-output-1.jpeg" width="150"
+    2025-02-03 16:36:25.849 | INFO     | semantic_catalogue.model.graph:generation_graph:31 - Initializing generation graph
+
+<img src="DOCS_files/figure-commonmark/cell-4-output-2.png" width="150"
 alt="Generation graph" />
 
 1.  **Start:** The user selects the ‘Ask AI’ option for a particular

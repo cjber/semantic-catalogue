@@ -99,7 +99,7 @@ import logging
 
 from IPython.display import Image, display
 
-from src.model.model import search_graph, generation_graph
+from semantic_catalogue.model.graph import search_graph, generation_graph
 
 logging.getLogger().setLevel(logging.ERROR)
 ```
