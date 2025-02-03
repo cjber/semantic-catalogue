@@ -20,30 +20,32 @@
 
 ## Overview
 
-The Semantic Catalogue is an advanced system designed to enhance the search capabilities of data catalogues by leveraging semantic understanding. Unlike traditional keyword-based searches, this system uses semantic embeddings to provide users with more accurate and contextually relevant results. The project integrates several cutting-edge technologies, including OpenAI's language models, Pinecone's vector database, and Dagster's data orchestration capabilities, to deliver a comprehensive solution for semantic search and data management.
+The Semantic Catalogue is an agentic system designed to enhance the search capabilities of data catalogues by considering semantic understanding. Unlike traditional keyword-based searches, this system uses semantic embeddings to provide users with more accurate and contextually relevant results. The project integrates OpenAI's large language models (LLMs), Pinecone's vector database, and Dagster's data orchestration capabilities, to deliver a comprehensive solution for semantic search and data management.
 
 ## Features
 
-- **Semantic Search:** Utilises OpenAI embeddings stored in Pinecone to perform semantic queries, enhancing search discoverability through cosine similarity.
-- **Retrieval Augmented Generation (RAG):** Employs GPT 4o-mini to generate responses that explain the relevance of retrieved datasets, providing transparency and insights.
+- **Semantic Search:** Utilises OpenAI embeddings stored in Pinecone to perform semantic queries, enhancing dataset search discoverability over keyword-based solutions.
+- **Retrieval Augmented Generation (RAG):** Uses GPT 4o-mini to generate responses that explain the relevance of retrieved datasets, with inline citations, providing transparency and insights.
 - **Moderation and Hallucination Detection:** Ensures generated content is appropriate and factually grounded, using moderation and hallucination detection mechanisms.
-- **Automated Data Management:** Leverages Dagster to automate the creation and continuous management of the Pinecone vector database, ensuring efficient data handling and updates.
+- **Automated Data Management:** Dagster is used to automate the creation and continuous management of the Pinecone vector database, ensuring efficient data handling and automated updates.
 
 ## System Architecture
 
-The Semantic Catalogue employs a Retrieval Augmented Generation (RAG) architecture, which combines retrieval-based and generation-based models. This involves two main steps:
+The Semantic Catalogue uses Retrieval Augmented Generation (RAG), which combines retrieval-based and generation-based LLMs. This involves two main steps:
 
-1. **Retrieval:** Relevant datasets are retrieved based on a user's query using semantic embeddings.
+1. **Retrieval:** Relevant datasets are retrieved based on a user's query using the dot-product similarity semantic embeddings.
 2. **Generation:** The retrieved dataset descriptions are used to generate contextually relevant responses that explain their relevance to the query.
 
 ![System Architecture](./reports/figs/system.png)
 *System Architecture*
 
-- **Backend (FastAPI):** Handles API requests and integrates with the data processing pipeline. It serves as the core interface for interacting with the semantic search system.
-- **Frontend (React):** Provides a user-friendly interface for users to interact with the semantic search capabilities. It allows users to input queries and view results in an intuitive manner.
-- **Data Processing (Dagster):** Manages the entire data lifecycle, from ingestion to processing and storage. Dagster's robust pipeline ensures data is handled efficiently and accurately.
+- **Backend (FastAPI & LangGraph):** LangGraph provides the core functionality of the system, providing a strucutured framework. FastAPI wraps the graphs, allowing for the system to integrate with external systems.
+- **Data Processing (Dagster):** Manages the entire data lifecycle, from ingestion to processing and storage. Dagster ensures that descriptive metadata used in the search system is automatically updated and upserted to a Pinecone database.
 - **Vector Database (Pinecone):** Stores semantic embeddings for efficient search operations. Pinecone's vector database is optimised for handling high-dimensional data, making it ideal for semantic search tasks.
 - **Machine Learning Models (OpenAI):** Powers the semantic understanding and generation capabilities. OpenAI's models are used to interpret queries and generate relevant responses based on retrieved data.
+
+
+## Detailed Functionality
 
 ### Data Management with Dagster
 
@@ -53,24 +55,21 @@ Dagster automates the data management processes, including data ingestion, trans
 *Global Asset Lineage*
 
 
-## Detailed Functionality
-
 ### Semantic Search
 
 The semantic search functionality uses OpenAI embeddings, which are stored in Pinecone. When a user submits a query, the system retrieves relevant dataset descriptions by comparing the query's semantic embedding with those stored in the database. This process ensures that the most contextually relevant datasets are identified and returned.
 
-![](./reports/figs/search_graph.png)
+![Search Graph](./reports/figs/search_graph.png)
 
 ### Retrieval Augmented Generation
 
 1. **Generation:** Once relevant datasets are retrieved, the system uses GPT 4o-turbo to generate explanations of their relevance to the user's query. This step enhances transparency by providing users with insights into why certain datasets were selected.
 
-
 2. **Moderation and Hallucination Detection**: To ensure the quality and appropriateness of generated content, the system includes moderation and hallucination detection mechanisms. These features help maintain the integrity of the information provided to users by filtering out inappropriate generations, or regenerating incorrect dataset summaries.
 
 3. **Automated Data Management**: Dagster automates data management tasks. It orchestrates the ingestion, transformation, and indexing of data, ensuring that the Pinecone vector database is always up-to-date. This ensures that new datasets are automatically embedded and hosted on Pinecone as they are collected by their respective institutions.
 
-![](./reports/figs/gen_graph.png)
+![Generation Graph](./reports/figs/gen_graph.png)
 
 ## Getting Started
 
