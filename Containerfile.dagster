@@ -14,5 +14,5 @@ WORKDIR /opt/dagster/app
 COPY uv.lock pyproject.toml .env README.md ./
 COPY bm25 ./bm25
 
-RUN uv sync --frozen
+RUN uv sync --frozen --no-install-project --link-mode=copy
 RUN python -c "import nltk;nltk.download('punkt_tab')"

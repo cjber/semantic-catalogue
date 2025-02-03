@@ -11,7 +11,7 @@ WORKDIR /app
 ADD uv.lock /app/uv.lock
 ADD pyproject.toml /app/pyproject.toml
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project
+    uv sync --frozen --no-install-project --link-mode=copy
 
 ADD . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
