@@ -10,3 +10,4 @@ chunk_overlap = 32
 llm = "gpt-4o-mini"
 top_k = 50
 alpha = 0.75
+max_iterations = 3

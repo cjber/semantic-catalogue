@@ -20,6 +20,7 @@ class ModelSettings(BaseSettings):
     llm: str = Field(min_length=1)
     top_k: int = Field(gt=0, le=15_000)
     alpha: float = Field(ge=0.0, le=1.0)
+    max_iterations: int = Field(gt=0, lt=10)
 
 
 class Settings(BaseSettings):
