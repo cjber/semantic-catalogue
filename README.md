@@ -6,7 +6,7 @@
 ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
 ![Dagster](https://img.shields.io/badge/Dagster-654FF0?style=for-the-badge&logo=Dagster&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/fastapi-109989?style=for-the-badge&logo=FASTAPI&logoColor=white)  
-![ChatGPT](https://img.shields.io/badge/ChatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
 ![LangChain](https://img.shields.io/badge/langchain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 
 ---
@@ -57,19 +57,20 @@ Dagster automates the data management processes, including data ingestion, trans
 
 ### Semantic Search
 
-The semantic search functionality is powered by OpenAI embeddings, which are stored in Pinecone. When a user submits a query, the system retrieves relevant dataset descriptions by comparing the query's semantic embedding with those stored in the database. This process ensures that the most contextually relevant datasets are identified and returned.
+The semantic search functionality uses OpenAI embeddings, which are stored in Pinecone. When a user submits a query, the system retrieves relevant dataset descriptions by comparing the query's semantic embedding with those stored in the database. This process ensures that the most contextually relevant datasets are identified and returned.
+
+![](./reports/figs/search_graph.png)
 
 ### Retrieval Augmented Generation
 
-Once relevant datasets are retrieved, the system uses GPT 4o-turbo to generate explanations of their relevance to the user's query. This step enhances transparency by providing users with insights into why certain datasets were selected.
+1. **Generation:** Once relevant datasets are retrieved, the system uses GPT 4o-turbo to generate explanations of their relevance to the user's query. This step enhances transparency by providing users with insights into why certain datasets were selected.
 
-### Moderation and Hallucination Detection
 
-To ensure the quality and appropriateness of generated content, the system includes moderation and hallucination detection mechanisms. These features help maintain the integrity of the information provided to users by filtering out inappropriate or unsupported content.
+2. **Moderation and Hallucination Detection**: To ensure the quality and appropriateness of generated content, the system includes moderation and hallucination detection mechanisms. These features help maintain the integrity of the information provided to users by filtering out inappropriate generations, or regenerating incorrect dataset summaries.
 
-### Automated Data Management
+3. **Automated Data Management**: Dagster automates data management tasks. It orchestrates the ingestion, transformation, and indexing of data, ensuring that the Pinecone vector database is always up-to-date. This ensures that new datasets are automatically embedded and hosted on Pinecone as they are collected by their respective institutions.
 
-Dagster plays a critical role in automating data management tasks. It orchestrates the ingestion, transformation, and indexing of data, ensuring that the Pinecone vector database is always up-to-date. This automation is essential for maintaining the system's performance and accuracy.
+![](./reports/figs/gen_graph.png)
 
 ## Getting Started
 
@@ -77,7 +78,7 @@ Dagster plays a critical role in automating data management tasks. It orchestrat
 
 Ensure you have the following installed:
 
-- Python 3.8+
+- Python >=3.12,<3.13
 - Docker or Podman
 - Git
 
@@ -99,9 +100,17 @@ To contribute, please follow these steps:
 
 3. **Install dependencies:**
 
-   ```bash
-   pip install . # (or uv sync)
-   ```
+    This project uses `uv`:
+
+    ```bash
+    uv sync
+    ```
+
+    Alternatively, `pip` can also be used to install from a `pyproject.yaml`:
+
+    ```bash
+    pip install . # ensure you are using a venv
+    ```
 
 4. **Configure the system:**
 
