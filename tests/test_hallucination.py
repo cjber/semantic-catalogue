@@ -9,4 +9,4 @@ def test_hallucination_grader_chain():
         {"document": document, "generation": generation}
     )
     assert hasattr(result, "binary_score")
-    assert result.binary_score in ["yes", "no"]
+    assert result.binary_score in [1, 0]

@@ -4,7 +4,9 @@ from semantic_catalogue.model.logging import logger
 from semantic_catalogue.model.nodes.explain_node import (
     check_hallucination,
     explain_dataset,
+    fix_hallucination,
     moderate_generation,
+    should_regenerate,
     skip_hallucination,
 )
 from semantic_catalogue.model.nodes.search_node import search
@@ -31,9 +33,12 @@ def generation_graph():
     workflow.add_node("explain_dataset", explain_dataset)
     workflow.add_node("moderate_generation", moderate_generation)
     workflow.add_node("check_hallucination", check_hallucination)
+    workflow.add_node("fix_hallucination", fix_hallucination)
 
     workflow.add_edge(START, "explain_dataset")
     workflow.add_edge("explain_dataset", "moderate_generation")
+    workflow.add_edge("fix_hallucination", "check_hallucination")
+
     workflow.add_conditional_edges("moderate_generation", skip_hallucination)
-    workflow.add_edge("check_hallucination", END)
+    workflow.add_conditional_edges("check_hallucination", should_regenerate)
     return workflow.compile()

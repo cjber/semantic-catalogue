@@ -7,31 +7,37 @@ from semantic_catalogue.common.settings import cfg
 
 _ = load_dotenv()
 
+human = """
+You are grading text summaries of source documents focused on faithfulness and detection of any hallucinations.
 
-class GradeHallucinations(BaseModel):
-    """Binary score for hallucination present in generation answer."""
+Ensure that the Assistant's Summary meets the following criteria: 
+(1) it does not contain information outside the score of the source document provided
+(2) the summary should be fully grounded in and based upon the source documents
 
-    binary_score: str = Field(
-        description="Answer is grounded in the facts, 'yes' or 'no'"
-    )
+Score:
+A score of 1 means that the Assistant Summary meets the criteria. This is the highest (best) score. 
+A score of 0 means that the Assistant Summary does not the criteria. This is the lowest possible score you can give.
+
+Explain your reasoning step-by-step to ensure your reasoning and conclusion are correct. 
+
+Assistant's Summary: {generation}
+
+Source document: {document}
+"""
+
+
+class HallucinationChecker(BaseModel):
+    """Grade the summary based upon the above criteria."""
+
+    score: int = Field(..., description="Score for the summary")
+    explanation: str = Field(..., description="Explain your reasoning for the score")
 
 
 llm = ChatOpenAI(model=cfg.model.llm, temperature=0)
-hallucination_grader = llm.with_structured_output(GradeHallucinations)
+SLLM = llm.with_structured_output(HallucinationChecker, strict=True)
 
-system = """
-You are a grader assessing whether an LLM generation is grounded in / supported by a set of retrieved facts.
-
-Give a binary score 'yes' or 'no'. 'yes' means that the answer is grounded in / supported by the set of facts.
-"""
-hallucination_prompt = ChatPromptTemplate.from_messages(
-    [
-        ("system", system),
-        ("human", "Set of facts: \n\n {document} \n\n LLM generation: {generation}"),
-    ]
-)
-
-hallucination_grader_chain = hallucination_prompt | hallucination_grader
+hallucination_prompt = ChatPromptTemplate([("system", human)])
+hallucination_grader_chain = hallucination_prompt | SLLM
 
 if __name__ == "__main__":
     test_document = "Water is wet."

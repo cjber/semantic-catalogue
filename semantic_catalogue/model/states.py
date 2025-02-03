@@ -10,7 +10,8 @@ class GenerationState(TypedDict):
     query: str
     document: str
     generation: str
+    explanation: str
+    iteration: int
     chunks: list[dict]
 
-    hallucination: str
-    inappropriate: str
+    is_hallucination: str
