@@ -29,7 +29,7 @@ The Semantic Catalogue is a data discovery and explanation system that helps use
   - Hybrid document retrieval
   - Relevance scoring and ranking
 - **Generation Graph**:
-  - Dataset explanation generation with citations
+  - Dataset explanation generation with inline citations
   - Hallucination detection
   - Content moderation
   - Iterative refinement
@@ -52,7 +52,7 @@ The Semantic Catalogue is a data discovery and explanation system that helps use
   - Citation generation
   - Hallucination checking
   - Content moderation
-  - Explanation refinement
+  - Explanation refinement (if hallucinated)
 
 ### 6. Orchestration & Scheduling
 - **Dagster**:
@@ -122,11 +122,3 @@ The Semantic Catalogue is a data discovery and explanation system that helps use
   - Dagster asset monitoring
   - API request tracking
   - Error logging
-
-## Future Enhancements
-
-- User feedback integration
-- Query refinement suggestions
-- Multi-modal support (charts, visualizations)
-- Advanced caching mechanisms
-- User-specific personalization
