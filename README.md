@@ -24,7 +24,7 @@ The Semantic Catalogue is an agentic system designed to enhance the search capab
 
 ## Features
 
-- **Semantic Search:** Utilises OpenAI embeddings stored in Pinecone to perform semantic queries, enhancing dataset search discoverability over keyword-based solutions.
+- **Semantic Search:** Uses OpenAI embeddings stored in Pinecone to perform semantic queries, enhancing dataset search discoverability over keyword-based solutions.
 - **Retrieval Augmented Generation (RAG):** Uses GPT 4o-mini to generate responses that explain the relevance of retrieved datasets, with inline citations, providing transparency and insights.
 - **Moderation and Hallucination Detection:** Ensures generated content is appropriate and factually grounded, using moderation and hallucination detection mechanisms.
 - **Automated Data Management:** Dagster is used to automate the creation and continuous management of the Pinecone vector database, ensuring efficient data handling and automated updates.
