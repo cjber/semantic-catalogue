@@ -38,6 +38,6 @@ def search(state, retriever):
     quintile_labels = np.digitize(scores, quintiles) - 1
 
     for doc, score_quintile in zip(documents, quintile_labels):
-        doc.metadata["score_quintile"] = score_quintile
+        doc.metadata["score_quintile"] = int(score_quintile)
     logger.debug(f"Grouped documents into {len(documents)} groups")
     return {"documents": documents, "query": query}
