@@ -88,6 +88,13 @@ The Semantic Catalogue is a data discovery and explanation system that helps use
 - **Containerized Services**:
   - FastAPI service (Containerfile.fastapi)
   - Dagster service (Containerfile.dagster)
+- **Container Runtime Options**:
+  - Docker (default)
+  - Podman (alternative):
+    - Use `podman-compose` instead of `docker-compose`
+    - Set `DOCKER_HOST` environment variable if using rootless mode
+    - Add `--security-opt label=disable` to container runs
+    - Network configuration may require additional setup
 - **Dependencies**:
   - Python 3.12
   - UV package manager
@@ -95,6 +102,30 @@ The Semantic Catalogue is a data discovery and explanation system that helps use
 - **Configuration**:
   - TOML-based config management
   - Environment variables for secrets
+
+## Podman Considerations
+
+When using Podman instead of Docker:
+
+1. Installation:
+   ```bash
+   sudo apt-get install podman podman-docker podman-compose
+   ```
+
+2. Rootless Mode:
+   - Configure subuids/subgids for your user
+   - Set appropriate ulimits
+   - May require additional network configuration
+
+3. Compatibility:
+   - Most Docker commands work with `podman` alias
+   - Use `podman-compose` for compose files
+   - Volume mounts may require different permissions
+
+4. Networking:
+   - Podman uses a different network stack
+   - May need to configure firewall rules
+   - Rootless containers use slirp4netns by default
 
 ## Key Technologies
 
