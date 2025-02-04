@@ -1,4 +1,8 @@
+import nltk
+
 from semantic_catalogue.model.main import search
+
+nltk.download("punkt_tab")
 
 
 def test_search():
