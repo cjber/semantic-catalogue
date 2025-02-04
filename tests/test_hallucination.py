@@ -1,4 +1,7 @@
-from semantic_catalogue.model.chains.hallucination import hallucination_grader_chain
+from semantic_catalogue.model.chains.hallucination import (
+    HallucinationChecker,
+    hallucination_grader_chain,
+)
 
 
 def test_hallucination_grader_chain():
@@ -8,5 +11,6 @@ def test_hallucination_grader_chain():
     result = hallucination_grader_chain.invoke(
         {"document": document, "generation": generation}
     )
-    assert hasattr(result, "binary_score")
-    assert result.binary_score in [1, 0]
+    assert isinstance(result, HallucinationChecker)
+    assert hasattr(result, "score")
+    assert result.score in [1, 0]
