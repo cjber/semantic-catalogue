@@ -1,0 +1,36 @@
+name: Python CI
+
+on: [push, pull_request]
+
+
+jobs:
+  run:
+    name: python
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run Linter
+        run: uv pip install ruff && ruff check .
+
+      - name: Run Tests
+        run: |
+          uv pip install pytest
+          pytest --maxfail=0 --disable-warnings --tb=short
+
+      - name: Run Type Checks
+        run: uv pip install mypy && mypy .
