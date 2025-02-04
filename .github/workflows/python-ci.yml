@@ -24,13 +24,11 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      - name: Run pre-commit
+        run: uv run pre-commit run --all-files
+
       - name: Run Linter
-        run: uv pip install ruff && uv run ruff check .
+        run: uv run ruff check .
 
       - name: Run Tests
-        run: |
-          uv pip install pytest
-          uv run pytest --maxfail=0 --disable-warnings --tb=short
-
-      - name: Run Type Checks
-        run: uv pip install mypy && mypy .
+        run: uv run pytest --maxfail=0 --disable-warnings --tb=short
