@@ -27,6 +27,9 @@ jobs:
       - name: Set OpenAI API Key
         run: echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
 
+      - name: Set Pinecone API Key
+        run: echo "PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}" >> $GITHUB_ENV
+
       - name: Run Linter
         run: uv run ruff check .
 
