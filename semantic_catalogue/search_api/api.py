@@ -4,7 +4,8 @@ from uuid import UUID, uuid4
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from langchain_core.documents import Document
-from src.model.model import generate, search
+
+from semantic_catalogue.model.main import generate, search
 
 app = FastAPI()
 app.add_middleware(
