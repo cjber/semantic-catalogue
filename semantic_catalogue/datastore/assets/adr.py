@@ -78,7 +78,6 @@ def adr_datasets(
     adr_session: requests.Session,
     adr_datasets_id: pl.DataFrame,
 ) -> pl.DataFrame:
-
     datasets_list = []
     for row in tqdm(adr_datasets_id.rows(named=True), total=len(adr_datasets_id)):
         dataset = _fetch_dataset_info(context, adr_session, row)

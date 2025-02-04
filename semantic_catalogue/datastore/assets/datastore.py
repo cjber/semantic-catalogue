@@ -95,7 +95,7 @@ def pinecone_index(context: AssetExecutionContext, openai: OpenAIResource):
 
     for doc in documents:
         doc.page_content = (
-            f"Dataset Title: {doc.metadata["title"]}\n\n{doc.page_content}"
+            f"Dataset Title: {doc.metadata['title']}\n\n{doc.page_content}"
         )
 
     bm25_encoder = BM25Encoder()

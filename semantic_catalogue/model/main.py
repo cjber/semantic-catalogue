@@ -28,9 +28,8 @@ def generate(query, document, thread_id):
 
 
 if __name__ == "__main__":
-    query = "AHAH"
+    query = "AHAH data"
     out = search(query=query, thread_id="1234")
 
     out_gen = generate(query=query, document=out["documents"][0], thread_id="1234")
     out_gen
-    [doc.metadata["score"] for doc in out["documents"]]

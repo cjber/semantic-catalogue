@@ -1,6 +1,5 @@
 from typing import List
 
-from langchain_core.output_parsers.openai_tools import JsonOutputKeyToolsParser
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 

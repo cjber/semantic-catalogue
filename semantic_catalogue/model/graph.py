@@ -51,4 +51,6 @@ def plot_graph():
     )
 
     generation = generation_graph()
-    generation.get_graph().draw_mermaid_png(output_file_path="./reports/figs/gen_graph.png")
+    generation.get_graph().draw_mermaid_png(
+        output_file_path="./reports/figs/gen_graph.png"
+    )
