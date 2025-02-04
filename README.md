@@ -1,6 +1,6 @@
 <div align="center">
 
-![](./reports/figs/svg/logo-no-background.svg)
+![](./docs/figs/svg/logo-no-background.svg)
 
 ![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
 ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
@@ -36,7 +36,7 @@ The Semantic Catalogue uses Retrieval Augmented Generation (RAG), which combines
 1. **Retrieval:** Relevant datasets are retrieved based on a user's query using the dot-product similarity semantic embeddings.
 2. **Generation:** The retrieved dataset descriptions are used to generate contextually relevant responses that explain their relevance to the query.
 
-![System Architecture](./reports/figs/system.png)
+![System Architecture](./docs/figs/system.png)
 *System Architecture*
 
 - **Backend (FastAPI & LangGraph):** LangGraph provides the core functionality of the system, providing a strucutured framework. FastAPI wraps the graphs, allowing for the system to integrate with external systems.
@@ -51,7 +51,7 @@ The Semantic Catalogue uses Retrieval Augmented Generation (RAG), which combines
 
 Dagster automates the data management processes, including data ingestion, transformation, and indexing. This ensures the Pinecone vector database is continuously updated and maintained, which is crucial for the accuracy and relevance of the semantic search capabilities.
 
-![Global Asset Lineage](./reports/figs/Global_Asset_Lineage.svg)
+![Global Asset Lineage](./docs/figs/Global_Asset_Lineage.svg)
 *Global Asset Lineage*
 
 
@@ -59,7 +59,7 @@ Dagster automates the data management processes, including data ingestion, trans
 
 The semantic search functionality uses OpenAI embeddings, which are stored in Pinecone. When a user submits a query, the system retrieves relevant dataset descriptions by comparing the query's semantic embedding with those stored in the database. This process ensures that the most contextually relevant datasets are identified and returned.
 
-![Search Graph](./reports/figs/search_graph.png)
+![Search Graph](./docs/figs/search_graph.png)
 
 ### Retrieval Augmented Generation
 
@@ -69,7 +69,7 @@ The semantic search functionality uses OpenAI embeddings, which are stored in Pi
 
 3. **Automated Data Management**: Dagster automates data management tasks. It orchestrates the ingestion, transformation, and indexing of data, ensuring that the Pinecone vector database is always up-to-date. This ensures that new datasets are automatically embedded and hosted on Pinecone as they are collected by their respective institutions.
 
-![Generation Graph](./reports/figs/gen_graph.png)
+![Generation Graph](./docs/figs/gen_graph.png)
 
 ## Getting Started
 

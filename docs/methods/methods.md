@@ -76,7 +76,7 @@ and their linkeage as they are automatically processed.
 
 <div id="fig-dagster">
 
-![](./figs/dagster_light.png)
+![](../figs/dagster_light.png)
 
 Figure 1: Dagster global asset lineage
 
@@ -183,7 +183,7 @@ broad overview of the system architecture.
 
 <div id="fig-architecture">
 
-![](./figs/system.png)
+![](../figs/system.png)
 
 Figure 2: System architecture
 
@@ -202,11 +202,11 @@ and **Ask AI**.
 
 **Search Process:**
 
-    2025-02-03 16:36:25.654 | INFO     | semantic_catalogue.model.graph:search_graph:18 - Initializing search graph
-    2025-02-03 16:36:25.714 | DEBUG    | semantic_catalogue.model.graph:search_graph:20 - Dataset retriever initialized
+    2025-02-04 10:00:02.296 | INFO     | semantic_catalogue.model.graph:search_graph:18 - Initializing search graph
+    2025-02-04 10:00:02.351 | DEBUG    | semantic_catalogue.model.graph:search_graph:20 - Dataset retriever initialized
 
-<img src="DOCS_files/figure-commonmark/cell-3-output-2.png" width="70"
-alt="Search process graph" />
+<img src="methods_files/figure-commonmark/cell-3-output-2.png"
+width="70" alt="Search process graph" />
 
 1.  **Start:** The user initiates a search query through the interface.
 2.  **Retrieve:** The query is embedded using the LLM, and relevant
@@ -216,10 +216,10 @@ alt="Search process graph" />
 
 **Ask AI Process:**
 
-    2025-02-03 16:36:25.849 | INFO     | semantic_catalogue.model.graph:generation_graph:31 - Initializing generation graph
+    2025-02-04 10:00:02.479 | INFO     | semantic_catalogue.model.graph:generation_graph:31 - Initializing generation graph
 
-<img src="DOCS_files/figure-commonmark/cell-4-output-2.png" width="150"
-alt="Generation graph" />
+<img src="methods_files/figure-commonmark/cell-4-output-2.png"
+width="150" alt="Generation graph" />
 
 1.  **Start:** The user selects the ‘Ask AI’ option for a particular
     dataset.

@@ -9,7 +9,7 @@ execute:
   echo: false
 monofont: 'JetBrains Mono'
 monofontoptions: 
-  - Scale=0.55
+  - Scale=0.75
 ---
 
 # Introduction
@@ -32,7 +32,7 @@ To optimise the accuracy of search results, dataset descriptions were 'chunked' 
 
 To maintain the currency and relevance of the data within the Semantic Data Catalogue, the extraction, processing, and embedding pipeline is automated using the [Dagster](https://dagster.io) framework. This automation facilitates the regular updating of the database as new datasets are added to the source catalogues, ensuring that the system remains up-to-date and continues to provide accurate and comprehensive search results. Figure @fig-dagster gives an overview of the '_[assets](https://docs.dagster.io/concepts/assets/software-defined-assets)_' and their linkeage as they are automatically processed.
 
-![Dagster global asset lineage](./figs/dagster_light.png){#fig-dagster}
+![Dagster global asset lineage](../figs/dagster_light.png){#fig-dagster}
 
 ## Semantic Search and RAG Model
 
@@ -88,7 +88,7 @@ NOTE: add hallucinations and other examples
 
 @fig-architecture gives a broad overview of the system architecture.
 
-![System architecture](./figs/system.png){#fig-architecture}
+![System architecture](../figs/system.png){#fig-architecture}
 
 The architecture is designed to integrate various components seamlessly, ensuring efficient data retrieval, processing, and user interaction. It includes a data ingestion pipeline, a vector database for storing embeddings, an LLM for query processing, and a user interface for presenting results and explanations.
 
@@ -138,7 +138,8 @@ display(
 2. **Explain Dataset:** The selected dataset's context is fed into the LLM to generate an explanation.
 3. **Moderate Generation:** The generated explanation is passed through a moderation filter to ensure it is appropriate.
 4. **Check Hallucination:** The system checks for any AI-generated hallucinations or inaccuracies.
-5. **End:** The final, moderated explanation is presented to the user.
+5. **Fix Hallucination:** If there is a hallucination the response is regenerated.
+6. **End:** The final, moderated explanation is presented to the user.
 
 ## Implementation details
 
