@@ -25,12 +25,12 @@ jobs:
         run: uv sync
 
       - name: Run Linter
-        run: uv pip install ruff && ruff check .
+        run: uv pip install ruff && uv run ruff check .
 
       - name: Run Tests
         run: |
           uv pip install pytest
-          pytest --maxfail=0 --disable-warnings --tb=short
+          uv run pytest --maxfail=0 --disable-warnings --tb=short
 
       - name: Run Type Checks
         run: uv pip install mypy && mypy .
