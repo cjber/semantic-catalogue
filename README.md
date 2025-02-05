@@ -17,11 +17,6 @@
 [Methodology](./reports/DOCS.md) · [View Demo](https://apps.cdrc.ac.uk/semantic-catalogue) · [Getting Started](https://github.com/cjber/semantic-catalogue?tab=readme-ov-file#getting-started)
 </div>
 
-
-## Overview
-
-The Semantic Catalogue enhances data catalogue search capabilities using semantic understanding rather than traditional keyword matching. It combines OpenAI's LLMs, Pinecone's vector database, and Dagster's orchestration to deliver accurate, context-aware search results.
-
 ## Features
 
 - **Semantic Search:** Leverages OpenAI embeddings in Pinecone for context-aware dataset discovery
@@ -53,7 +48,6 @@ Key components:
 Dagster automates the entire data pipeline - from ingestion to indexing - ensuring the Pinecone database stays current with new datasets.
 
 ![Global Asset Lineage](./docs/figs/Global_Asset_Lineage.svg)
-*Global Asset Lineage*
 
 ### Search & Generation
 
@@ -62,6 +56,7 @@ Dagster automates the entire data pipeline - from ingestion to indexing - ensuri
 3. **Quality Control:** Moderation and hallucination detection ensure reliable outputs
 
 ![Search Graph](./docs/figs/search_graph.png)
+
 ![Generation Graph](./docs/figs/gen_graph.png)
 
 ## Getting Started
