@@ -63,8 +63,8 @@ Dagster automates the entire data pipeline - from ingestion to indexing - ensuri
 
 FastAPI is used to create a RESTful API allowing for the RAG graphs to interact with external services. The following endpoints are provided:
 
-**POST Query (`/query`)**: Accepts a search query and returns relevant documents alongside a unique thread ID associated with the query using the LangGraph `search_graph`.
-**GET Explain (`/explain/{thread_id}`)**: Accepts a `thread_id` and `docid` to provide an explanation using the LangGraph `generation_graph`.
+* **POST Query (`/query`)**: Accepts a search query and returns relevant documents alongside a unique thread ID associated with the query using the LangGraph `search_graph`.
+* **GET Explain (`/explain/{thread_id}`)**: Accepts a `thread_id` and `docid` to provide an explanation using the LangGraph `generation_graph`.
 
 ### Containerisation
 
