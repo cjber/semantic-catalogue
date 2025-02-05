@@ -1,5 +1,7 @@
 from typing import TypedDict
 
+from langchain_core.documents import Document
+
 
 class SearchState(TypedDict):
     query: str
@@ -8,7 +10,7 @@ class SearchState(TypedDict):
 
 class GenerationState(TypedDict):
     query: str
-    document: str
+    document: Document
 
     iteration: int
 
