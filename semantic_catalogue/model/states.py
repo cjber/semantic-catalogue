@@ -9,9 +9,13 @@ class SearchState(TypedDict):
 class GenerationState(TypedDict):
     query: str
     document: str
+
+    iteration: int
+
     generation: str
     explanation: str
-    iteration: int
-    cited_chunks: list[dict]
+
+    doc_chunks: str
+    citations: list[int]
 
     is_hallucination: str
