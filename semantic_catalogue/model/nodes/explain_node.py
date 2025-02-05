@@ -5,8 +5,8 @@ from langgraph.graph import END
 
 from semantic_catalogue.common.settings import cfg
 from semantic_catalogue.common.utils import format_docs_with_id
-from semantic_catalogue.model.chains.citations import citation_chain
-from semantic_catalogue.model.chains.fix import fix_chain
+from semantic_catalogue.model.chains.fix_generation import fix_chain
+from semantic_catalogue.model.chains.generation import generation_chain
 from semantic_catalogue.model.chains.hallucination import hallucination_grader_chain
 from semantic_catalogue.model.chains.moderation import moderate
 from semantic_catalogue.model.logging import logger
@@ -20,6 +20,18 @@ chunk_splitter = RecursiveCharacterTextSplitter(
 
 
 def explain_dataset(state):
+    """
+    Generate an explanation for the given dataset.
+
+    Split a document into chunks, format, and invoke the generation chain.
+    Generates a response with inline citations based on the query and document chunks.
+
+    Args:
+        state (dict): The state containing the query and document.
+
+    Returns:
+        dict: The updated state with the generation, citations, iteration, and document chunks.
+    """
     logger.info("Starting explain generation...")
     query = state["query"]
     document = state["document"]
@@ -29,23 +41,33 @@ def explain_dataset(state):
     chunks = chunk_splitter.split_documents([document])
     doc_chunks = format_docs_with_id(chunks)
     logger.debug("Invoking citation chain to generate response")
-    out = citation_chain.invoke({"query": query, "context": doc_chunks})
+    out = generation_chain.invoke({"query": query, "context": doc_chunks})
     logger.debug(f"Generation result length: {len(out.generation)}")
 
-    cited_chunks = [
-        chunk.model_dump() for id, chunk in enumerate(chunks) if id in out.citations
-    ]
-    logger.debug(f"{len(cited_chunks)} chunks used in citation: {out.citations}")
+    logger.debug(f"Chunks used in citation: {out.citations}")
 
     return {
         **state,
         "generation": out.generation,
+        "citations": out.citations,
         "iteration": 0,
-        "cited_chunks": cited_chunks,
+        "doc_chunks": doc_chunks,
     }
 
 
 def moderate_generation(state):
+    """
+    Moderate the generated content.
+
+    Invokes the moderation chain to check the generated content for inappropriate
+    content and updates the state accordingly.
+
+    Args:
+        state (dict): The state containing the generation.
+
+    Returns:
+        dict: The updated state with the moderated generation.
+    """
     logger.info("Starting moderation...")
     generation = state["generation"]
 
@@ -61,6 +83,19 @@ def moderate_generation(state):
 
 
 def check_hallucination(state):
+    """
+    Check for hallucinations in the generated content.
+
+    Invokes the hallucination grader chain to evaluate the generated content
+    against the original document and updates the state with the hallucination
+    status and explanation.
+
+    Args:
+        state (dict): The state containing the document and generation.
+
+    Returns:
+        dict: The updated state with the hallucination status, explanation, and iteration count.
+    """
     logger.info("Starting hallucination check process...")
 
     logger.debug("Invoking hallucination grader chain")
@@ -76,6 +111,18 @@ def check_hallucination(state):
 
 
 def should_regenerate(state) -> Literal["fix_hallucination", END]:
+    """
+    Determine if the explanation should be regenerated.
+
+    Checks if the generated content contains hallucinations and if the maximum
+    iteration count has been reached.
+
+    Args:
+        state (dict): The state containing the hallucination status and iteration count.
+
+    Returns:
+        Literal["fix_hallucination", END]: The next step in the graph.
+    """
     logger.info("Checking if the explanation should be regenerated.")
     if not state["is_hallucination"] or state["iteration"] > cfg.model.max_iterations:
         return END
@@ -84,20 +131,41 @@ def should_regenerate(state) -> Literal["fix_hallucination", END]:
 
 
 def fix_hallucination(state):
+    """
+    Attempt to fix hallucinations in the generated content.
+
+    Invokes the fix chain to generate a new response based on the query, document
+    chunks, current generation, and explanation.
+
+    Args:
+        state (dict): The state containing the query, document chunks, generation, and explanation.
+
+    Returns:
+        dict: The updated state with the fixed generation and citations.
+    """
     logger.info("Attempting to fix hallucination...")
-    generation = fix_chain.invoke(
+    out = fix_chain.invoke(
         {
             "query": state["query"],
-            "context": state["document"].page_content,
+            "context": state["doc_chunks"],
             "summary": state["generation"],
             "explanation": state["explanation"],
         }
     )
-    logger.debug(f"Fixed generation result length: {len(generation)}")
-    return {**state, "generation": generation}
+    logger.debug(f"Fixed generation result length: {len(out.generation)}")
+    return {**state, "generation": out.generation, "citations": out.citations}
 
 
 def skip_hallucination(state) -> Literal["check_hallucination", END]:
+    """
+    Skip the hallucination check if the generation contains inappropriate content.
+
+    Args:
+        state (dict): The state containing the generation.
+
+    Returns:
+        Literal["check_hallucination", END]: The next step in the graph.
+    """
     if state["generation"] != "Inappropriate content found in generation.":
         return "check_hallucination"
     logger.warning("Inappropriate content found in generation.")

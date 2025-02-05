@@ -15,6 +15,15 @@ from semantic_catalogue.model.states import GenerationState, SearchState
 
 
 def search_graph():
+    """
+    Initializes and compiles the search graph.
+
+    The search graph consists of a single node "search" which uses the dataset retriever
+    to perform a search operation. The graph starts at START and ends at END.
+
+    Returns:
+        StateGraph: The compiled search graph.
+    """
     logger.info("Initializing search graph")
     retriever = dataset_retriever()
     logger.debug("Dataset retriever initialized")
@@ -28,6 +37,16 @@ def search_graph():
 
 
 def generation_graph():
+    """
+    Initializes and compiles the generation graph.
+
+    The generation graph consists of nodes for explaining datasets, moderating generation,
+    checking for hallucinations, and fixing hallucinations. The graph starts at START and
+    has conditional edges based on the results of moderation and hallucination checks.
+
+    Returns:
+        StateGraph: The compiled generation graph.
+    """
     logger.info("Initializing generation graph")
     workflow = StateGraph(GenerationState)
     workflow.add_node("explain_dataset", explain_dataset)
@@ -45,6 +64,12 @@ def generation_graph():
 
 
 def plot_graph():
+    """
+    Plots the search and generation graphs as PNG images.
+
+    The search graph is saved to "./reports/figs/search_graph.png" and the generation graph
+    is saved to "./reports/figs/gen_graph.png".
+    """
     search = search_graph()
     search.get_graph().draw_mermaid_png(
         output_file_path="./reports/figs/search_graph.png"

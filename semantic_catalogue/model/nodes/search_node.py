@@ -5,6 +5,14 @@ from semantic_catalogue.model.logging import logger
 
 
 def _group_by_document(documents):
+    """
+    Group documents by their ID and merge their content.
+
+    :param documents: List of Document objects to be grouped.
+    :type documents: list[Document]
+    :return: List of grouped Document objects.
+    :rtype: list[Document]
+    """
     grouped_id: dict[str, list[Document]] = {}
 
     for d in documents:
@@ -25,6 +33,16 @@ def _group_by_document(documents):
 
 
 def search(state, retriever):
+    """
+    Perform a search using the given state and retriever.
+
+    :param state: The state containing the query.
+    :type state: dict
+    :param retriever: The retriever object used to perform the search.
+    :type retriever: object
+    :return: A dictionary containing the grouped documents and the query.
+    :rtype: dict
+    """
     logger.info("Starting retrieval process...")
     query = state["query"]
     logger.debug(f"Query for retrieval: {query}")
