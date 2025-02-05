@@ -132,3 +132,27 @@ Once up and running, access the semantic catalogue search at `http://localhost:8
 ### Running the Dagster Pipeline
 
 The Dagster UI is available at `http://localhost:3000`. Adjust the Auto Materialise and Sensor settings to start the automation.
+
+### Alternative Methods
+
+All scripts run independently, for debugging purposes. For example, to run the full LangGraph pipeline.
+
+```
+python -m semantic_catalogue.model.main
+```
+
+This submits a test query and print the outputs. Chains also provide outputs for testing:
+
+
+```bash
+python -m semantic_catalogue.model.chains.hallucination
+```
+
+This prints the output of a test generation that has hallucinations.
+
+
+You can also start the API server independently:
+
+```bash
+fastapi dev semantic_catalogue/search_api/api.py
+```
