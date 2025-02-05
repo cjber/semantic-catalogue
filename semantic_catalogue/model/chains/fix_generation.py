@@ -1,28 +1,12 @@
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
+from langchain import hub
 
+from semantic_catalogue.model.chains.generation import CitedAnswer
 from semantic_catalogue.model.llms.llm import LLM
 
-human = """
-The following is a users 'query', a retrieved 'context' taken from a document that relates to the query, and an **incorrect** 'summary' of the context with respect to the 'query'. Your job is to generate a **correct** summary based solely on the 'context', considering how it relates to the users 'query', avoiding any errors highlighted in the explanation.
+prompt = hub.pull("cjber/regeneration-with-citations")
 
-- **Query**:
-{query}
-
-- **Incorrect Summary**:
-{summary}
-
-- **Explanation of Errors**:
-{explanation}
-
-- **Original Context**:
-{context}
-
-**Your task**: Write a concise and accurate summary of the original context, taking into account the errors highlighted in the explanation. You must consider how the 'query' relates with this new summary.
-"""
-
-gen_prompt = ChatPromptTemplate.from_messages([("human", human)])
-fix_chain = gen_prompt | LLM | StrOutputParser()
+SLLM = LLM.with_structured_output(CitedAnswer)
+fix_chain = prompt | SLLM
 
 if __name__ == "__main__":
     test_query = "healthy food"
