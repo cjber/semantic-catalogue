@@ -13,6 +13,8 @@ class Paths:
     UKDS = DATA / "ukds"
     CDRC = DATA / "cdrc"
 
+    CONFIG = Path("config")
+
     @classmethod
     def ensure_directories_exist(cls):
         cls.ADR.mkdir(parents=True, exist_ok=True)

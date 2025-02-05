@@ -3,7 +3,9 @@ import tomllib
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
-with open("./config/config.toml", "rb") as f:
+from semantic_catalogue.common.utils import Paths
+
+with open(Paths.CONFIG / "config.toml", "rb") as f:
     Config = tomllib.load(f)
 
 
