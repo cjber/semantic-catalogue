@@ -1,7 +1,7 @@
 import polars as pl
 from dagster import AssetCheckResult, asset_check
 
-from src.common.utils import Paths
+from semantic_catalogue.common.utils import Paths
 
 
 @asset_check(asset="adr_datasets_id")

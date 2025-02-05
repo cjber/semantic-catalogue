@@ -19,6 +19,16 @@ LOGIN_URL = "https://data.cdrc.ac.uk/user/login"
 
 @asset
 def cdrc_metadata(context: AssetExecutionContext) -> list[dict]:
+    """
+    Fetches metadata from the CDRC API.
+
+    :param context: The execution context provided by Dagster.
+    :type context: AssetExecutionContext
+    :return: A list of dictionaries containing the metadata.
+    :rtype: list[dict]
+    :raises requests.HTTPError: If an HTTP error occurs during the request.
+    :raises Exception: If any other error occurs during the request.
+    """
     try:
         r = requests.get(METADATA_URL)
         r.raise_for_status()
@@ -28,12 +38,17 @@ def cdrc_metadata(context: AssetExecutionContext) -> list[dict]:
     except Exception as err:
         context.log.error(f"Other error occurred: {err}")
         raise
-    catalogue_metadata = r.json()["result"][0]
-    return catalogue_metadata
+    return r.json()["result"][0]
 
 
 @asset
 def cdrc_notes(cdrc_metadata: list[dict]):
+    """
+    Processes and saves CDRC notes to text files.
+
+    :param cdrc_metadata: A list of dictionaries containing the metadata.
+    :type cdrc_metadata: list[dict]
+    """
     outdir = Paths.CDRC / "txt"
     outdir.mkdir(parents=True, exist_ok=True)
     for file in outdir.glob("*.txt"):
@@ -49,6 +64,14 @@ def cdrc_notes(cdrc_metadata: list[dict]):
 
 @asset
 def cdrc_resources(cdrc_metadata: list[dict]) -> pl.DataFrame:
+    """
+    Processes and saves CDRC resources metadata to a parquet file.
+
+    :param cdrc_metadata: A list of dictionaries containing the metadata.
+    :type cdrc_metadata: list[dict]
+    :return: A DataFrame containing the resources metadata.
+    :rtype: pl.DataFrame
+    """
     resources = list(
         itertools.chain.from_iterable(
             [item["resources"] if "resources" in item else [] for item in cdrc_metadata]
@@ -71,6 +94,12 @@ def cdrc_resources(cdrc_metadata: list[dict]) -> pl.DataFrame:
 
 @asset
 def cdrc_session() -> requests.Session:
+    """
+    Creates and returns a logged-in session for the CDRC API.
+
+    :return: A logged-in session.
+    :rtype: requests.Session
+    """
     session = requests.Session()
     session.post(
         LOGIN_URL,
@@ -91,6 +120,16 @@ def cdrc_pdfs(
     cdrc_session: requests.Session,
     cdrc_resources: pl.DataFrame,
 ):
+    """
+    Downloads and saves CDRC PDFs.
+
+    :param context: The execution context provided by Dagster.
+    :type context: AssetExecutionContext
+    :param cdrc_session: A logged-in session for the CDRC API.
+    :type cdrc_session: requests.Session
+    :param cdrc_resources: A DataFrame containing the resources metadata.
+    :type cdrc_resources: pl.DataFrame
+    """
     outdir = Paths.CDRC / "pdf"
     outdir.mkdir(parents=True, exist_ok=True)
     for file in outdir.glob("*.pdf"):

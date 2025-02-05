@@ -11,10 +11,31 @@ from semantic_catalogue.common.utils import Paths, clean_string
 
 
 class CDRCLoader(BaseLoader):
+    """
+    Loader for CDRC documents.
+
+    :param file_path: Path to the file to be loaded.
+    :type file_path: str
+    """
+
     def __init__(self, file_path: str) -> None:
+        """
+        Initialize the CDRCLoader.
+
+        :param file_path: Path to the file to be loaded.
+        :type file_path: str
+        """
         self.file_path = file_path
 
     def lazy_load(self) -> Iterator[Document]:
+        """
+        Lazily load documents from the file.
+
+        Processes both PDFs and txt files.
+
+        :yield: Document objects with content and metadata.
+        :rtype: Iterator[Document]
+        """
         if self.file_path.endswith(".pdf"):
             documents = PDFMinerLoader(self.file_path).load()
             metadata = self._add_cdrc_pdf_metadata(self.file_path)
@@ -34,11 +55,19 @@ class CDRCLoader(BaseLoader):
 
     @staticmethod
     def _add_cdrc_txt_metadata(file_path: str) -> dict[str, str]:
+        """
+        Add metadata for CDRC text files.
+
+        :param file_path: Path to the text file.
+        :type file_path: str
+        :return: Metadata dictionary.
+        :rtype: dict[str, str]
+        """
         id = Path(file_path).stem.rsplit("-", maxsplit=1)[0]
         cdrc_meta = pl.read_parquet(Paths.CDRC / "cdrc_metadata.parquet")
 
         metadata = cdrc_meta.filter(pl.col("id") == id)
-        iso_date = dateparser.parse(metadata["metadata_created"][0]).isoformat()  # type: ignore
+        iso_date = dateparser.parse(metadata["metadata_created"][0]).isoformat()
         return {
             "title": metadata["title"][0],
             "id": metadata["id"][0],
@@ -49,6 +78,14 @@ class CDRCLoader(BaseLoader):
 
     @staticmethod
     def _add_cdrc_pdf_metadata(file_path: str) -> dict[str, str]:
+        """
+        Add metadata for CDRC PDF files.
+
+        :param file_path: Path to the PDF file.
+        :type file_path: str
+        :return: Metadata dictionary.
+        :rtype: dict[str, str]
+        """
         id = Path(file_path).stem
         main_id = "-".join(id.split("-")[:5])
         resource_id = "-".join(id.split("-")[5:])
@@ -70,10 +107,29 @@ class CDRCLoader(BaseLoader):
 
 
 class ADRLoader(BaseLoader):
+    """
+    Loader for ADR documents.
+
+    :param file_path: Path to the file to be loaded.
+    :type file_path: str
+    """
+
     def __init__(self, file_path: str) -> None:
+        """
+        Initialize the ADRLoader.
+
+        :param file_path: Path to the file to be loaded.
+        :type file_path: str
+        """
         self.file_path = file_path
 
     def lazy_load(self) -> Iterator[Document]:
+        """
+        Lazily load documents from the file.
+
+        :yield: Document objects with content and metadata.
+        :rtype: Iterator[Document]
+        """
         with open(self.file_path, encoding="utf-8") as f:
             content = f.read()
             yield Document(
@@ -84,6 +140,14 @@ class ADRLoader(BaseLoader):
 
     @staticmethod
     def _add_adr_metadata(file_path: str) -> dict[str, str]:
+        """
+        Add metadata for ADR files.
+
+        :param file_path: Path to the file.
+        :type file_path: str
+        :return: Metadata dictionary.
+        :rtype: dict[str, str]
+        """
         doc_id, origin_id, _ = Path(file_path).stem.split("-")
         metadata = (
             pl.scan_parquet(Paths.ADR / "adr_datasets.parquet")
@@ -110,10 +174,29 @@ class ADRLoader(BaseLoader):
 
 
 class UKDSLoader(BaseLoader):
+    """
+    Loader for UKDS documents.
+
+    :param file_path: Path to the file to be loaded.
+    :type file_path: str
+    """
+
     def __init__(self, file_path: str) -> None:
+        """
+        Initialize the UKDSLoader.
+
+        :param file_path: Path to the file to be loaded.
+        :type file_path: str
+        """
         self.file_path = file_path
 
     def lazy_load(self) -> Iterator[Document]:
+        """
+        Lazily load documents from the file.
+
+        :yield: Document objects with content and metadata.
+        :rtype: Iterator[Document]
+        """
         with open(self.file_path, encoding="utf-8") as f:
             content = f.read()
             yield Document(
@@ -124,6 +207,14 @@ class UKDSLoader(BaseLoader):
 
     @staticmethod
     def _add_ukds_metadata(file_path: str) -> dict[str, str]:
+        """
+        Add metadata for UKDS files.
+
+        :param file_path: Path to the file.
+        :type file_path: str
+        :return: Metadata dictionary.
+        :rtype: dict[str, str]
+        """
         doc_id = Path(file_path).stem.split("-")[0]
         metadata = (
             pl.scan_parquet(Paths.UKDS / "ukds.parquet")
@@ -136,7 +227,7 @@ class UKDSLoader(BaseLoader):
             return {}
 
         date_created = (
-            dateparser.parse(metadata["date"][0]).isoformat()  # type: ignore
+            dateparser.parse(metadata["date"][0]).isoformat()
             if isinstance(metadata["date"][0], str)
             else ""
         )

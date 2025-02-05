@@ -16,6 +16,12 @@ NAMESPACES = {"oai": "http://www.openarchives.org/OAI/2.0/", "ns2": "ddi:codeboo
 
 @asset
 def ukds_identifiers() -> list[str]:
+    """
+    Fetches a list of identifiers from the UK Data Service.
+
+    Returns:
+        list[str]: A list of identifiers.
+    """
     params = PARAMS.copy()
 
     identifiers = []
@@ -44,6 +50,16 @@ def ukds_identifiers() -> list[str]:
 
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
 def _fetch_metadata(context: AssetExecutionContext, identifier: str):
+    """
+    Fetches metadata for a given identifier from the UK Data Service.
+
+    Args:
+        context (AssetExecutionContext): The execution context.
+        identifier (str): The identifier for which to fetch metadata.
+
+    Returns:
+        ElementTree.Element: The root element of the fetched metadata XML.
+    """
     metadata_url = (
         f"{BASE_URL}?verb=GetRecord&identifier={identifier}&metadataPrefix=ddi"
     )
@@ -57,14 +73,23 @@ def _fetch_metadata(context: AssetExecutionContext, identifier: str):
         context.log.error(f"Other error occurred: {err}")
         raise
 
-    root = ET.fromstring(response.content)
-    return root
+    return ET.fromstring(response.content)
 
 
 @asset
 def ukds_datasets(
     context: AssetExecutionContext, ukds_identifiers: list[str]
 ) -> pl.DataFrame:
+    """
+    Fetches datasets from the UK Data Service and returns them as a DataFrame.
+
+    Args:
+        context (AssetExecutionContext): The execution context.
+        ukds_identifiers (list[str]): A list of identifiers.
+
+    Returns:
+        pl.DataFrame: A DataFrame containing the datasets.
+    """
     data = []
     for identifier in tqdm(ukds_identifiers):
         context.log.info(f"Fetching identifier {identifier}")
@@ -109,6 +134,12 @@ def ukds_datasets(
 
 @asset
 def ukds_abstracts(ukds_datasets: pl.DataFrame):
+    """
+    Extracts abstracts from the datasets and saves them as text files.
+
+    Args:
+        ukds_datasets (pl.DataFrame): A DataFrame containing the datasets.
+    """
     outdir = Paths.UKDS / "txt"
     outdir.mkdir(parents=True, exist_ok=True)
     for file in outdir.glob("*.txt"):

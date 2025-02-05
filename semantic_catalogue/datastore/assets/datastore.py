@@ -30,6 +30,18 @@ def _process_documents(
     glob_patterns: list[str],
     loader_classes: list[type],
 ) -> list[Document]:
+    """
+    Process documents from given paths using specified loaders and glob patterns.
+
+    :param paths: List of paths to directories containing documents.
+    :type paths: list[Path]
+    :param glob_patterns: List of glob patterns to match files in the directories.
+    :type glob_patterns: list[str]
+    :param loader_classes: List of loader classes to use for loading documents.
+    :type loader_classes: list[type]
+    :return: List of processed documents.
+    :rtype: list[Document]
+    """
     documents = []
     for path, glob_pattern, loader_cls in zip(paths, glob_patterns, loader_classes):
         loader = DirectoryLoader(
@@ -51,6 +63,14 @@ def _process_documents(
     auto_materialize_policy=wait_on_all_parents_policy,
 )
 def pinecone_index(context: AssetExecutionContext, openai: OpenAIResource):
+    """
+    Create and populate a Pinecone index with document embeddings.
+
+    :param context: The execution context for the asset.
+    :type context: AssetExecutionContext
+    :param openai: The OpenAI resource for generating embeddings.
+    :type openai: OpenAIResource
+    """
     pc = Pinecone()
     if cfg.datastore.index_name in [index["name"] for index in pc.list_indexes()]:
         pc.delete_index(cfg.datastore.index_name)

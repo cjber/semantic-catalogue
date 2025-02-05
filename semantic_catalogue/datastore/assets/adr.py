@@ -16,6 +16,12 @@ BASE_URL = "https://api-datacatalogue.adruk.org/api"
 
 @asset
 def adr_session() -> requests.Session:
+    """
+    Create and configure a requests session for ADR API.
+
+    :return: Configured requests session.
+    :rtype: requests.Session
+    """
     session = requests.Session()
     session.headers.update({"X-API-Version": API_VERSION})
     return session
@@ -25,6 +31,16 @@ def adr_session() -> requests.Session:
 def adr_datasets_id(
     context: AssetExecutionContext, adr_session: requests.Session
 ) -> pl.DataFrame:
+    """
+    Fetch dataset IDs from ADR API and return as a DataFrame.
+
+    :param context: Dagster asset execution context.
+    :type context: AssetExecutionContext
+    :param adr_session: Configured requests session.
+    :type adr_session: requests.Session
+    :return: DataFrame containing dataset IDs.
+    :rtype: pl.DataFrame
+    """
     datasets = []
     for page_number in itertools.count(start=1):
         context.log.info(f"Fetching page {page_number}")
@@ -48,6 +64,18 @@ def adr_datasets_id(
 def _fetch_datasets_page(
     context: AssetExecutionContext, adr_session: requests.Session, page_number: int
 ) -> dict:
+    """
+    Fetch a single page of datasets from ADR API.
+
+    :param context: Dagster asset execution context.
+    :type context: AssetExecutionContext
+    :param adr_session: Configured requests session.
+    :type adr_session: requests.Session
+    :param page_number: Page number to fetch.
+    :type page_number: int
+    :return: Dictionary containing dataset page content.
+    :rtype: dict
+    """
     params = {
         "pageSize": PAGE_SIZE,
         "pageNumber": page_number,
@@ -61,9 +89,7 @@ def _fetch_datasets_page(
         response = adr_session.get(f"{BASE_URL}/{{sql}}/dataset", params=params)
         response.raise_for_status()
         content = json.loads(response.content)["content"]
-        if not content:
-            return {"end": page_number}
-        return content
+        return content or {"end": page_number}
     except requests.HTTPError as http_err:
         context.log.error(f"HTTP error occurred: {http_err}")
         return {}
@@ -78,10 +104,21 @@ def adr_datasets(
     adr_session: requests.Session,
     adr_datasets_id: pl.DataFrame,
 ) -> pl.DataFrame:
+    """
+    Fetch dataset metadata from ADR API and return as a DataFrame.
+
+    :param context: Dagster asset execution context.
+    :type context: AssetExecutionContext
+    :param adr_session: Configured requests session.
+    :type adr_session: requests.Session
+    :param adr_datasets_id: DataFrame containing dataset IDs.
+    :type adr_datasets_id: pl.DataFrame
+    :return: DataFrame containing detailed dataset information.
+    :rtype: pl.DataFrame
+    """
     datasets_list = []
     for row in tqdm(adr_datasets_id.rows(named=True), total=len(adr_datasets_id)):
-        dataset = _fetch_dataset_info(context, adr_session, row)
-        if dataset:
+        if dataset := _fetch_dataset_info(context, adr_session, row):
             datasets_list.append(dataset)
     df = pl.json_normalize(datasets_list)
     df.write_parquet(Paths.ADR / "adr_datasets.parquet")
@@ -93,6 +130,18 @@ def adr_datasets(
 def _fetch_dataset_info(
     context: AssetExecutionContext, adr_session: requests.Session, row: dict
 ) -> dict:
+    """
+    Fetch detailed information for a single dataset from ADR API.
+
+    :param context: Dagster asset execution context.
+    :type context: AssetExecutionContext
+    :param adr_session: Configured requests session.
+    :type adr_session: requests.Session
+    :param row: Dictionary containing dataset ID and origin ID.
+    :type row: dict
+    :return: Dictionary containing detailed dataset information.
+    :rtype: dict
+    """
     url = f"{BASE_URL}/dataset/{row['id']}?originId={row['origin_id']}"
     try:
         response = adr_session.get(url)
@@ -121,6 +170,12 @@ def _fetch_dataset_info(
 
 @asset
 def adr_descriptions(adr_datasets: pl.DataFrame) -> None:
+    """
+    Generate text files containing dataset descriptions and abstracts.
+
+    :param adr_datasets: DataFrame containing detailed dataset information.
+    :type adr_datasets: pl.DataFrame
+    """
     outdir = Paths.ADR / "txt"
     outdir.mkdir(parents=True, exist_ok=True)
     for file in outdir.glob("*.txt"):
