@@ -52,5 +52,7 @@ def generate(query, document, thread_id):
 if __name__ == "__main__":
     query = "AHAH Index"
     out = search(query=query, thread_id="1234")
+    print(out)
 
     out_gen = generate(query=query, document=out["documents"][0], thread_id="1234")
+    print(out_gen)
