@@ -69,6 +69,7 @@ async def explain(thread_id: UUID, docid: int) -> dict:
     )
     query = query_mapping[thread_id]
     out = generate(query=query, document=document, thread_id=thread_id)
-    out["document"] = doc_dict
 
+    # ensure Document is serialisable
+    out["document"] = doc_dict
     return out
