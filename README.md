@@ -14,7 +14,7 @@
 
 ---
 
-[Methodology](./reports/DOCS.md) · [View Demo](https://apps.cdrc.ac.uk/semantic-catalogue) · [Getting Started](https://github.com/cjber/semantic-catalogue?tab=readme-ov-file#getting-started)
+[Methodology](./docs/methods/DOCS.md) · [View Demo](https://apps.cdrc.ac.uk/semantic-catalogue) · [Getting Started](https://github.com/cjber/semantic-catalogue?tab=readme-ov-file#getting-started)
 </div>
 
 ## Features
