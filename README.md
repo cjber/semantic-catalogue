@@ -119,6 +119,25 @@ To contribute, please follow these steps:
 > [!WARNING]
 > This project is not intended for public use and requires access to a private database.
 
+To run the project successfully, it expects a `.env` file with the following environment variables defined:
+
+```bash
+#!/bin/bash
+
+export CDRC_USERNAME=""
+export CDRC_PASSWORD=""
+export CDRC_FORM_BUILD_ID=""
+export PINECONE_API_KEY=""
+export OPENAI_API_KEY=""
+export LLAMA_CLOUD_API_KEY=""
+
+# optional
+export LANGCHAIN_TRACING_V2="true"
+export LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
+export LANGCHAIN_API_KEY=""
+export LANGCHAIN_PROJECT=""
+```
+
 The project is fully containerised using `podman`/`docker` `compose`. To run the full system, execute:
 
 ```bash
