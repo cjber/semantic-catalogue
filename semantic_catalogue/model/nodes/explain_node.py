@@ -26,11 +26,10 @@ def explain_dataset(state):
     Split a document into chunks, format, and invoke the generation chain.
     Generates a response with inline citations based on the query and document chunks.
 
-    Args:
-        state (dict): The state containing the query and document.
-
-    Returns:
-        dict: The updated state with the generation, citations, iteration, and document chunks.
+    :param state: The state containing the query and document.
+    :type state: dict
+    :return: The updated state with the generation, citations, iteration, and document chunks.
+    :rtype: dict
     """
     logger.info("Starting explain generation...")
     query = state["query"]
@@ -62,11 +61,10 @@ def moderate_generation(state):
     Invokes the moderation chain to check the generated content for inappropriate
     content and updates the state accordingly.
 
-    Args:
-        state (dict): The state containing the generation.
-
-    Returns:
-        dict: The updated state with the moderated generation.
+    :param state: The state containing the generation.
+    :type state: dict
+    :return: The updated state with the moderated generation.
+    :rtype: dict
     """
     logger.info("Starting moderation...")
     generation = state["generation"]
@@ -90,11 +88,10 @@ def check_hallucination(state):
     against the original document and updates the state with the hallucination
     status and explanation.
 
-    Args:
-        state (dict): The state containing the document and generation.
-
-    Returns:
-        dict: The updated state with the hallucination status, explanation, and iteration count.
+    :param state: The state containing the document and generation.
+    :type state: dict
+    :return: The updated state with the hallucination status, explanation, and iteration count.
+    :rtype: dict
     """
     logger.info("Starting hallucination check process...")
 
@@ -117,11 +114,10 @@ def should_regenerate(state) -> Literal["fix_hallucination", END]:
     Checks if the generated content contains hallucinations and if the maximum
     iteration count has been reached.
 
-    Args:
-        state (dict): The state containing the hallucination status and iteration count.
-
-    Returns:
-        Literal["fix_hallucination", END]: The next step in the graph.
+    :param state: The state containing the hallucination status and iteration count.
+    :type state: dict
+    :return: The next step in the graph.
+    :rtype: Literal["fix_hallucination", END]
     """
     logger.info("Checking if the explanation should be regenerated.")
     if not state["is_hallucination"] or state["iteration"] > cfg.model.max_iterations:
@@ -137,11 +133,10 @@ def fix_hallucination(state):
     Invokes the fix chain to generate a new response based on the query, document
     chunks, current generation, and explanation.
 
-    Args:
-        state (dict): The state containing the query, document chunks, generation, and explanation.
-
-    Returns:
-        dict: The updated state with the fixed generation and citations.
+    :param state: The state containing the query, document chunks, generation, and explanation.
+    :type state: dict
+    :return: The updated state with the fixed generation and citations.
+    :rtype: dict
     """
     logger.info("Attempting to fix hallucination...")
     out = fix_chain.invoke(
@@ -160,11 +155,10 @@ def skip_hallucination(state) -> Literal["check_hallucination", END]:
     """
     Skip the hallucination check if the generation contains inappropriate content.
 
-    Args:
-        state (dict): The state containing the generation.
-
-    Returns:
-        Literal["check_hallucination", END]: The next step in the graph.
+    :param state: The state containing the generation.
+    :type state: dict
+    :return: The next step in the graph.
+    :rtype: Literal["check_hallucination", END]
     """
     if state["generation"] != "Inappropriate content found in generation.":
         return "check_hallucination"
