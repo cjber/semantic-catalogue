@@ -70,6 +70,31 @@ FastAPI is used to create a RESTful API allowing for the RAG graphs to interact 
 
 The entire project is containerised using Docker or Podman compose (tested with Podman). The `compose.yml` file gives more detail.
 
+### Project Tree
+
+```bash
+semantic_catalogue/  # main project directory
+├── common  # shared utility functions and settings
+├── datastore  # dagster configuration for data processing
+│   ├── assets  # dagster assets (e.g. datafiles)
+│   ├── jobs.py  # dagster jobs to combine and automate assets
+│   ├── loaders.py  # langchain loaders to create document objects
+│   ├── resources.py  # dagster-openai configuration
+│   └── schedules.py  # automate creation of assets
+├── model  # langgraph functions
+│   ├── chains  # chains that use prompts and llms (agents)
+│   ├── graph.py  # main graph definitions
+│   ├── llms  # openai llm and others if needed
+│   ├── logging.py  # basic logging definition
+│   ├── main.py  # wraps graphs for external use
+│   ├── nodes  # uses chains to define graph nodes
+│   ├── retrievers  # contains retrieval code using pinecone
+│   └── states.py  # defines graph states
+└── search_api  # fastapi code
+```
+
+13 directories, 32 files
+
 ## Getting Started
 
 ### Prerequisites
@@ -80,9 +105,9 @@ Ensure you have the following installed:
 - Docker or Podman
 - Git
 
-### Contribution Setup
+### Development Setup
 
-To contribute, please follow these steps:
+To develop this project, please follow these steps:
 
 1. **Clone the repository:**
 
