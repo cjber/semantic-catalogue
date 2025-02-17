@@ -106,17 +106,17 @@ services:
     networks:
       - frontend-network
 
-  frontend-node:
-    container_name: frontend-node
-    restart: on-failure
-    build: ./frontend
-    dockerfile: Dockerfile
-    expose:
-      - "8001"
-    ports:
-      - 8001:8001
-    networks:
-      - frontend-network
+  # frontend-node:
+  #   container_name: frontend-node
+  #   restart: on-failure
+  #   build: ./frontend
+  #   dockerfile: Dockerfile
+  #   expose:
+  #     - "8001"
+  #   ports:
+  #     - 8001:8001
+  #   networks:
+  #     - frontend-network
 
 networks:
   datastore-network:

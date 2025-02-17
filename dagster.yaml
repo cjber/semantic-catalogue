@@ -2,6 +2,7 @@ scheduler:
   module: dagster.core.scheduler
   class: DagsterDaemonScheduler
 
+# comment out everything below if running locally without docker
 run_storage:
   module: dagster_postgres.run_storage
   class: PostgresRunStorage
