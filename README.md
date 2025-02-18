@@ -176,9 +176,11 @@ The project is fully containerised using `podman`/`docker` `compose`. To run the
 podman compose up -d
 ```
 
-### Accessing the Frontend
+### Accessing the RESTful API
 
-Once up and running, access the semantic catalogue search at `http://localhost:8001`.
+Once up and running, access the semantic catalogue search API at `http://localhost:8000`.
+
+> Test endpoints at `http://localhost:8000/docs`
 
 ### Running the Dagster Pipeline
 
