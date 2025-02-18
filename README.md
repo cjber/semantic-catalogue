@@ -154,7 +154,6 @@ export CDRC_PASSWORD=""
 export CDRC_FORM_BUILD_ID=""
 export PINECONE_API_KEY=""
 export OPENAI_API_KEY=""
-export LLAMA_CLOUD_API_KEY=""
 
 # optional
 export LANGCHAIN_TRACING_V2="true"
