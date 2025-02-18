@@ -162,6 +162,14 @@ export LANGCHAIN_API_KEY=""
 export LANGCHAIN_PROJECT=""
 ```
 
+The `CDRC` environment variables allow you to log in as a normal user, and download the documents. The first two are self-explanatory, but the third is more difficult to find. To obtain the `CDRC_FORM_BUILD_ID`:
+
+1. Go to `https://data.cdrc.ac.uk/user/login`
+2. Right click anywhere and choose `inspect` (On Firefox it says **Inspect (Q)**)
+3. Click `network` in the inspect window, then type in your username and password and login
+4. At the top of the `network` window there should be a 'File' called `login`, select this then click the 'Request' tab.
+5. This should show you the `form_build_id` which corresponds with your user, and can be set as an environment variable.
+
 The project is fully containerised using `podman`/`docker` `compose`. To run the full system, execute:
 
 ```bash
