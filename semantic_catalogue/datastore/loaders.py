@@ -37,7 +37,12 @@ class CDRCLoader(BaseLoader):
         :rtype: Iterator[Document]
         """
         if self.file_path.endswith(".pdf"):
-            documents = PDFMinerLoader(self.file_path).load()
+            try:
+                documents = PDFMinerLoader(self.file_path).load()
+            except Exception as e:
+                print(f"PDF file not read: {e}")
+                documents = [Document(page_content="")]
+
             metadata = self._add_cdrc_pdf_metadata(self.file_path)
 
             for d in documents:
